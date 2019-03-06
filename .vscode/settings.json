@@ -1,7 +1,0 @@
-{
-    "java.checkstyle.configuration": "/sun_checks.xml",
-    "checkstyle.version": "/home/idoz/Desktop/University/OOP1/checkstyle-5.7-all.jar",
-    "checkstyle.configurationFile": "/home/idoz/Desktop/University/OOP1/biuoop.xml",
-    "checkstyle.autocheck": false,
-    "java.dependency.packagePresentation": "flat"
-} 
