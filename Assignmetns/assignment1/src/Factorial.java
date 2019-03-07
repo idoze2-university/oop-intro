@@ -1,5 +1,10 @@
 
- 
+/**
+ * The Factorial class provides an implementation of the factorial (n!)
+ * calculation, Using both a recursive method and an iterative method.
+ *
+ * @author zeiraid
+ */
 class Factorial {
     /**
      * @param args holds command line arguments
