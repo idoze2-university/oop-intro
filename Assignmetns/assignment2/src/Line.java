@@ -100,6 +100,9 @@ public class Line {
      * @return Wether or not the line is parralel to other.
      */
     private boolean isParralel(Line other) {
+        if (other == null) {
+            return false;
+        }
         if (isVertical()) {
             return other.isVertical();
         } else {
@@ -115,6 +118,9 @@ public class Line {
      * @return Point of intersection between the lines.
      */
     private Point lineIntersectionWith(Line other) {
+        if (other == null) {
+            return null;
+        }
         double slope = slope();
         double otherSlope = other.slope();
         double intersectionX = (slope * start.getX() - otherSlope * other.start.getX() + other.start.getY()
@@ -150,6 +156,9 @@ public class Line {
      * @return true if the lines intersect, false otherwise
      */
     public boolean isIntersecting(Line other) {
+        if (other == null) {
+            return false;
+        }
         return !equals(other) && !isParralel(other) && isInLineSegment(lineIntersectionWith(other));
 
     }
@@ -170,7 +179,12 @@ public class Line {
      * @return true is the lines are equal, false otherwise.
      */
     public boolean equals(Line other) {
-        return start == other.start && end == other.end;
+        if (other == null) {
+            return false;
+        } else {
+
+            return start == other.start && end == other.end;
+        }
     }
 
 }
