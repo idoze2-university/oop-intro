@@ -1,3 +1,5 @@
+import java.util.Random;
+
 /**
  * The Point class provides an implememntation of a Point object, with the
  * members: X coordinate, Y coordinate.
@@ -17,6 +19,10 @@ public class Point {
     public Point(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public String toString() {
+        return "(" + String.valueOf(x) + "," + String.valueOf(y) + ")";
     }
 
     /**
@@ -53,5 +59,9 @@ public class Point {
      */
     public double getY() {
         return y;
+    }
+
+    public static Point random(Random rand, int xBound, int yBound) {
+        return new Point(rand.nextInt(xBound), rand.nextInt(yBound));
     }
 }

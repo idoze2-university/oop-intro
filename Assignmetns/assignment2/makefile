@@ -1,8 +1,11 @@
 compile: bin
-	javac -d bin -cp lib/biuoop.jar src/*.java
+	javac -d bin -cp ./biuoop*.jar src/*.java
 
 run2:
-	java -cp ./*.jar:./bin AbstractArtDrawing
+	java -cp ./biuoop*.jar:./bin AbstractArtDrawing
+
+run3:
+	java -cp ./biuoop*.jar:./bin BouncingBallAnimation
 
 bin:
 	mkdir bin

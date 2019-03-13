@@ -58,9 +58,9 @@ public class AbstractArtDrawing {
   private void drawLine(Line line, Line[] lines, DrawSurface d) {
     d.setColor(Color.BLACK);
     d.drawLine((int) line.start().getX(), (int) line.start().getY(), (int) line.end().getX(), (int) line.end().getY());
-    drawPoint(line.middle(), Color.RED, d);
+    drawPoint(line.middle(), Color.BLUE, d);
     for (int i = 0; i < lines.length; i++) {
-      drawPoint(line.intersectionWith(lines[i]), Color.BLUE, d);
+      drawPoint(line.intersectionWith(lines[i]), Color.RED, d);
     }
   }
 

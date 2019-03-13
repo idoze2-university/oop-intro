@@ -34,7 +34,7 @@ public class Line {
     }
 
     /**
-     * Calculates the length of the line.
+     * Calculates th private Point start; private Point end; e length of the line.
      *
      * @return the length of the line.
      */
@@ -136,7 +136,7 @@ public class Line {
      */
     private boolean isInLineSegment(Point p) {
         double slope = slope();
-        boolean isInLine = p.getY() == slope * p.getX() - slope * start.getX() + start.getY();
+        boolean isInLine = p.getY()+0.001 >= slope * p.getX() - slope * start.getX() + start.getY();
         boolean isInLineSegment = false;
         if (start.getX() < end.getX()) {
             isInLineSegment = p.getX() >= start.getX() && p.getX() <= end.getX();
@@ -159,7 +159,7 @@ public class Line {
         if (other == null) {
             return false;
         }
-        return !equals(other) && !isParralel(other) && isInLineSegment(lineIntersectionWith(other));
+        return !equals(other) && !isParralel(other) && isInLineSegment(lineIntersectionWith(other)) && other.isInLineSegment(lineIntersectionWith(other));
 
     }
 
@@ -169,9 +169,16 @@ public class Line {
      */
     public Point intersectionWith(Line other) {
         if (isIntersecting(other)) {
-            return lineIntersectionWith(other);
+            Point inter = lineIntersectionWith(other);
+            System.out.println(
+                    "Line " + toString() + " And Line " + other.toString() + " Intersects at :" + inter.toString());
+            return inter;
         }
         return null;
+    }
+
+    public String toString() {
+        return start.toString() + "-->" + end.toString();
     }
 
     /**
