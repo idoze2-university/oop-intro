@@ -19,5 +19,8 @@ run3.4:
 checkstyle:
 	java -jar ../../../checkstyle-5.7-all.jar -c ../../../biuoop.xml src/*.java
 
+bin:
+	mkdir bin
+
 clean:
 	rm -rf bin
