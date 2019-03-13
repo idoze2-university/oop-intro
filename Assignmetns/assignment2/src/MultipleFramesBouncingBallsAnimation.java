@@ -5,12 +5,12 @@ import java.awt.Color;
 import java.util.Random;
 
 /**
- * The MultipleFrameBouncingBallAnimation utilizes the AnimationFrame, and
+ * The MultipleFramesBouncingBallsAnimation utilizes the AnimationFrame, and
  * implements a way to Load multiple frames with balls for each of them.
  *
  * @author zeiraid
  */
-public class MultipleFrameBouncingBallAnimation {
+public class MultipleFramesBouncingBallsAnimation {
 
   /**
    * reads from String array of sizes and inserts random balls with given sizes to
@@ -60,7 +60,7 @@ public class MultipleFrameBouncingBallAnimation {
   public static void main(String[] args) {
     GUI gui = new GUI("title", 600, 600);
     DrawSurface d = gui.getDrawSurface();
-    Boolean randomColorBalls = false;
+    Boolean randomColorBalls = true;
 
     // Create Gray Frame
     Frame containerG = new Frame(50, 50, 500, 500, Color.GRAY);

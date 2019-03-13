@@ -4,13 +4,13 @@ import biuoop.Sleeper;
 import java.awt.Color;
 
 /**
- * The BouncingBallAnimation class implements a static main operation wich
- * utilizes the AnimationFrame object for demonstrating the physics of a
- * bouncing ball in a 200x200 frame.
+ * The BouncingBallsAnimation class implements a static main operation wich
+ * utilizes the AnimationFrame object for demonstrating the physics of multiple
+ * bouncing balls in a 200x200 frame.
  *
  * @author zeiraid
  */
-public class BouncingBallAnimation {
+public class MultipleBouncingBallsAnimation {
   /**
    * @param args ball sizes read from the command line.
    */
@@ -20,9 +20,7 @@ public class BouncingBallAnimation {
 
     Frame containerG = new Frame(0, 0, 200, 200, Color.WHITE);
     AnimationFrame animationG = new AnimationFrame(containerG);
-    Ball ball = new Ball(0, 0, 30, java.awt.Color.BLACK, containerG);
-    ball.setVelocity(2, 2);
-    animationG.addBall(ball);
+    MultipleFramesBouncingBallsAnimation.loadBalls(args, animationG, false);
 
     Sleeper sleeper = new Sleeper();
     while (true) {

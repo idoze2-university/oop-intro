@@ -2,13 +2,19 @@ compile: bin
 	javac -d bin -cp ./biuoop*.jar src/*.java
 
 run2:
-	java -cp ./biuoop*.jar:./bin AbstractArtDrawing
+	java -cp biuoop-1.4.jar:bin AbstractArtDrawing
 
-run3:
-	java -cp ./biuoop*.jar:./bin BouncingBallAnimation
+run3.1:
+	java -cp biuoop-1.4.jar:bin BallsTest1
 
-bin:
-	mkdir bin
+run3.2:
+	java -cp biuoop-1.4.jar:bin BouncingBallAnimation
+
+run3.3:
+	java -cp biuoop-1.4.jar:bin MultipleBouncingBallsAnimation 12 2 3 4 2 9
+
+run3.4:
+	java -cp biuoop-1.4.jar:bin MultipleFramesBouncingBallsAnimation 12 2 3 4 2 9
 
 checkstyle:
 	java -jar ../../../checkstyle-5.7-all.jar -c ../../../biuoop.xml src/*.java
