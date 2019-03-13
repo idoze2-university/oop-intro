@@ -7,61 +7,63 @@ import java.util.Random;
  * @author zeiraid
  */
 public class Point {
-    private double x = 0;
-    private double y = 0;
+  private double x = 0;
+  private double y = 0;
 
-    /**
-     * The default Point constructor.
-     *
-     * @param x value to initialize the X coordinate.
-     * @param y value to initialize the Y coordinate.
-     */
-    public Point(double x, double y) {
-        this.x = x;
-        this.y = y;
-    }
+  /**
+   * The default Point constructor.
+   *
+   * @param x value to initialize the X coordinate.
+   * @param y value to initialize the Y coordinate.
+   */
+  public Point(double x, double y) {
+    this.x = x;
+    this.y = y;
+  }
 
-    public String toString() {
-        return "(" + String.valueOf(x) + "," + String.valueOf(y) + ")";
-    }
+  /**
+   * calculates the distance between two points.
+   *
+   * @param other the other point to compare with.
+   * @return the distance of this point to the other point.
+   */
+  public double distance(Point other) {
+    return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
+  }
 
-    /**
-     * calculates the distance between two points.
-     *
-     * @param other the other point to compare with.
-     * @return the distance of this point to the other point.
-     */
-    public double distance(Point other) {
-        return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
-    }
+  /**
+   * @param other the other point to compare with.
+   * @return true is the points are equal, false otherwise
+   */
+  public boolean equals(Point other) {
+    return x == other.x && y == other.y;
+  }
 
-    /**
-     * @param other the other point to compare with.
-     * @return true is the points are equal, false otherwise
-     */
-    public boolean equals(Point other) {
-        return x == other.x && y == other.y;
-    }
+  /**
+   * The get method for the X member.
+   *
+   * @return the x value of this point
+   */
+  public double getX() {
+    return x;
+  }
 
-    /**
-     * The get method for the X member.
-     *
-     * @return the x value of this point
-     */
-    public double getX() {
-        return x;
-    }
+  /**
+   * The get method for the Y member.
+   *
+   * @return the y value of this point
+   */
+  public double getY() {
+    return y;
+  }
 
-    /**
-     * The get method for the Y member.
-     *
-     * @return the y value of this point
-     */
-    public double getY() {
-        return y;
-    }
-
-    public static Point random(Random rand, int xBound, int yBound) {
-        return new Point(rand.nextInt(xBound), rand.nextInt(yBound));
-    }
+  /**
+   * @param rand   Random object for random calculations.
+   * @param xbound max value for X coordinate.
+   * @param ybound max value for Y coordinate.
+   * @return random point in the given x and y boundries.
+   */
+  public static Point random(Random rand, int xbound, int ybound) {
+    return new Point(rand.nextInt(xbound), rand.nextInt(ybound));
+  }
 }

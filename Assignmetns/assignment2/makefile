@@ -10,5 +10,8 @@ run3:
 bin:
 	mkdir bin
 
+checkstyle:
+	java -jar ../../../checkstyle-5.7-all.jar -c ../../../biuoop.xml src/*.java
+
 clean:
 	rm -rf bin

@@ -6,9 +6,21 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - BouncingBallAnimation",
+            "request": "launch",
+            "mainClass": "BouncingBallAnimation",
+            "projectName": "assignment2"
+        },
+        {
+            "type": "java",
             "name": "Debug (Launch) - Current File",
             "args": [
-                24, 4, 6, 8, 4, 18,
+                24,
+                4,
+                6,
+                8,
+                4,
+                18
             ],
             "request": "launch",
             "mainClass": "${file}"
