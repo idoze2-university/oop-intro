@@ -7,6 +7,8 @@ import java.util.Random;
  * The AbstractArtDrawing class implements the drawing of 10 random lines, their
  * intersection points and their middle points, using the GUI class in the
  * biuoop library.
+ *
+ * @author zeiraid
  */
 public class AbstractArtDrawing {
 

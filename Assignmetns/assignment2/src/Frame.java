@@ -5,6 +5,8 @@ import java.util.Random;
 /**
  * The Frame class implements a frame object, handling frame boundries and
  * mapping points in a fixed rectangle. can be draws to a drawsurface.
+ *
+ * @author zeiraid
  */
 public class Frame {
   private Point zero;

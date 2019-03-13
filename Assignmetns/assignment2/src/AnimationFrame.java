@@ -5,6 +5,8 @@ import java.util.Random;
 /**
  * The MultipleBouncingBallFrame implements an Object for animating multiple
  * balls bouncing in a frame, can be displayed on a drawSurface.
+ *
+ * @author zeiraid
  */
 public class AnimationFrame {
   private Frame frame;

@@ -7,6 +7,8 @@ import java.awt.Color;
  * The BouncingBallAnimation class implements a static main operation wich
  * utilizes the AnimationFrame object for demonstrating the physics of a
  * bouncing ball in a 200x200 frame.
+ *
+ * @author zeiraid
  */
 public class BouncingBallAnimation {
   /**

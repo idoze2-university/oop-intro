@@ -7,6 +7,8 @@ import java.util.Random;
 /**
  * The MultipleFrameBouncingBallAnimation utilizes the AnimationFrame, and
  * implements a way to Load multiple frames with balls for each of them.
+ *
+ * @author zeiraid
  */
 public class MultipleFrameBouncingBallAnimation {
 

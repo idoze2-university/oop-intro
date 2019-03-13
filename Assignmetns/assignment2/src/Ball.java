@@ -4,6 +4,8 @@ import java.util.Random;
 
 /**
  * The Ball class implements a Ball object.
+ *
+ * @author zeiraid
  */
 public class Ball {
   private Point center;

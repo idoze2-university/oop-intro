@@ -1,6 +1,8 @@
 /**
  * The velocity class provides an implementation for a velocity object, holding
  * a dx and dy fields, capable of moving a point one step in a given velocity.
+ *
+ * @author zeiraid
  */
 public class Velocity {
   private double dx;
