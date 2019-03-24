@@ -20,6 +20,10 @@ class Rectangle {
     this.height = height;
   }
 
+  public Rectangle(double x, double y, double width, double height) {
+    this(new Point(x, y), width, height);
+  }
+
   /**
    * @return a (possibly empty) List of intersection points between the boundry
    *         lines and the specified line.
@@ -32,7 +36,11 @@ class Rectangle {
             new Line(upperLeft.addY(height), upperLeft.add(width, height)), // Lower Boundry.
             new Line(upperLeft.addX(width), upperLeft.add(width, height)) }; // Right Boundry.
     for (Line l : boundries) {
-      lst.add(line.intersectionWith(l));
+      Point pt = line.intersectionWith(l);
+      if (pt != null) {
+
+        lst.add(pt);
+      }
     }
     return lst;
   }

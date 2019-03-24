@@ -52,9 +52,9 @@ public class Velocity {
    *         object.
    */
   public static Velocity fromAngleAndSpeed(double angle, double speed) {
-    // double anglerd = Math.toRadians(angle);
-    double dx = Math.cos(angle) * speed;
-    double dy = Math.sin(angle) * -speed;
+    double anglerd = Math.toRadians(angle);
+    double dx = Math.cos(anglerd) * speed;
+    double dy = Math.sin(anglerd) * -speed;
     return new Velocity(dx, dy);
   }
 }

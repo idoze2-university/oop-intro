@@ -1,3 +1,5 @@
+import biuoop.DrawSurface;
+
 /**
  * The Line class implements an Line-Segment object, consisting of a starting
  * and and ending point, which enclose it.
@@ -123,10 +125,15 @@ public class Line {
     }
     double slope = slope();
     double otherSlope = other.slope();
-    double intersectionX = // Calculate the possible Intersection point's X coordinate.
-        (slope * start.getX() - otherSlope * other.start.getX() + other.start.getY() - start.getY())
-            / (slope - otherSlope);
-
+    double intersectionX = start.getX();
+    if (isVertical()) {
+      intersectionX = start.getX();
+    } else if (other.isVertical()) {
+      intersectionX = other.start.getX();
+    } else {
+      intersectionX = (slope * start.getX() - otherSlope * other.start.getX() + other.start.getY() - start.getY())
+          / (slope - otherSlope);
+    }
     double intersectionY = slope * intersectionX - slope * start.getX() + start.getY();
     return new Point(intersectionX, intersectionY);
   }
@@ -137,14 +144,20 @@ public class Line {
    */
   private boolean isInLineSegment(Point p) {
     double slope = slope();
-    boolean isInLine = p.getY() + 0.001 >= slope * p.getX() - slope * start.getX() + start.getY();
-    boolean isInLineSegment = false;
+    boolean isInLine = p.getY() + 0.000001 >= slope * p.getX() - slope * start.getX() + start.getY();
+    boolean isInLineSegmentHorizonaly = false;
     if (start.getX() < end.getX()) {
-      isInLineSegment = p.getX() >= start.getX() && p.getX() <= end.getX();
+      isInLineSegmentHorizonaly = p.getX() >= start.getX() && p.getX() <= end.getX();
     } else {
-      isInLineSegment = p.getX() <= start.getX() && p.getX() >= end.getX();
+      isInLineSegmentHorizonaly = p.getX() <= start.getX() && p.getX() >= end.getX();
     }
-    return isInLine && isInLineSegment;
+    boolean isInLineSegmentVertically = false;
+    if (start.getY() < end.getY()) {
+      isInLineSegmentVertically = p.getY() >= start.getY() && p.getY() <= end.getY();
+    } else {
+      isInLineSegmentVertically = p.getY() <= start.getY() && p.getY() >= end.getY();
+    }
+    return isInLine && (isInLineSegmentHorizonaly || isVertical()) && isInLineSegmentVertically;
   }
 
   /**
@@ -160,8 +173,8 @@ public class Line {
     if (other == null) {
       return false;
     }
-    return !equals(other) && !isParralel(other) && isInLineSegment(lineIntersectionWith(other))
-        && other.isInLineSegment(lineIntersectionWith(other));
+    boolean inLineSegment = isInLineSegment(lineIntersectionWith(other));
+    return !equals(other) && !isParralel(other) && inLineSegment;
 
   }
 
@@ -207,6 +220,30 @@ public class Line {
     }
     return closest;
 
+  }
+
+  public double getAngle() {
+    double randAngle = Math.atan2(deltaY(), -deltaX());
+    return Math.toDegrees(randAngle);
+  }
+
+  public Line getHorizonalComponent() {
+    return new Line(start, new Point(end.getX(), start.getY()));
+  }
+
+  public Line getVerticalComponent() {
+    return new Line(start, new Point(start.getX(), end.getY()));
+  }
+
+  public double getLength() {
+    return start.distance(end);
+  }
+
+  public void drawOn(DrawSurface d) {
+    d.setColor(java.awt.Color.RED);
+    d.drawLine((int) start.getX(), (int) start.getY(), (int) end.getX(), (int) end.getY());
+    d.fillCircle((int) start.getX(), (int) start.getY(), 2);
+    d.fillCircle((int) end.getX(), (int) end.getY(), 2);
   }
 
 }

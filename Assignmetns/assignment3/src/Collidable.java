@@ -10,10 +10,8 @@ public interface Collidable {
    * velocity. The return is the new velocity expected after the hit (based on the
    * force the object inflicted on us).
    *
-   * @param collisionPoint
-   *                          Point at which we collided with the object.
-   * @param currentVelocity
-   *                          Velocity with which we collided with the object.
+   * @param collisionPoint  Point at which we collided with the object.
+   * @param currentVelocity Velocity with which we collided with the object.
    * @return the new velocity expected after the hit
    */
   Velocity hit(Point collisionPoint, Velocity currentVelocity);

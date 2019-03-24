@@ -1,16 +1,34 @@
-class Block implements Collidable {
+import biuoop.DrawSurface;
+import java.awt.Color;
 
-  private Rectangle container;
+/**
+ * The Block class implements a block object which implements the Collidable
+ * interface.
+ */
+class Block implements Collidable, Sprite {
 
-  public Block(Rectangle container) {
-    this.container = container;
+  private Rectangle collisionRectangle;
+  private Color color;
+
+  /**
+   * Default constructor.
+   *
+   * @param collisionRectangle the Collision rectangle of the block.
+   */
+  public Block(Rectangle collisionRectangle, Color color) {
+    this.collisionRectangle = collisionRectangle;
+    this.color = color;
+  }
+
+  public Block(double x, double y, double width, double height, Color color) {
+    this(new Rectangle(x, y, width, height), color);
   }
 
   /**
    * @return the "collision shape" of the object.
    */
   public Rectangle getCollisionRectangle() {
-    return container;
+    return collisionRectangle;
   }
 
   /**
@@ -18,13 +36,40 @@ class Block implements Collidable {
    * velocity. The return is the new velocity expected after the hit (based on the
    * force the object inflicted on us).
    *
-   * @param collisionPoint
-   *                          Point at which we collided with the object.
-   * @param currentVelocity
-   *                          Velocity with which we collided with the object.
+   * @param collisionPoint  Point at which we collided with the object.
+   * @param currentVelocity Velocity with which we collided with the object.
    * @return the new velocity expected after the hit
    */
   public Velocity hit(Point collisionPoint, Velocity currentVelocity) {
-    return currentVelocity;
+    Velocity velocity = currentVelocity;
+    if (collisionPoint.getX() <= collisionRectangle.getUpperLeft().getX()) {
+      velocity = new Velocity(-Math.abs(velocity.getDx()), velocity.getDy());
+    } else if (collisionPoint.getX() >= collisionRectangle.getUpperLeft().getX() + collisionRectangle.getWidth()) {
+      velocity = new Velocity(Math.abs(velocity.getDx()), velocity.getDy());
+    }
+    if (collisionPoint.getY() <= collisionRectangle.getUpperLeft().getY()) {
+      velocity = new Velocity(velocity.getDx(), -Math.abs(velocity.getDy()));
+    } else if (collisionPoint.getY() >= collisionRectangle.getUpperLeft().getY() + collisionRectangle.getHeight()) {
+      velocity = new Velocity(velocity.getDx(), Math.abs(velocity.getDy()));
+    }
+    return velocity;
+  }
+
+  public void drawOn(DrawSurface d) {
+    d.setColor(color);
+    int x0 = (int) collisionRectangle.getUpperLeft().getX();
+    int y0 = (int) collisionRectangle.getUpperLeft().getY();
+    int x1 = x0 + (int) collisionRectangle.getWidth();
+    int y1 = y0 + (int) collisionRectangle.getHeight();
+    d.fillRectangle(x0, y0, x1, y1);
+  }
+
+  public void timePassed() {
+    // nothing to do.
+  }
+
+  public void addToGame(Game g) {
+    g.addSprite(this);
+    g.addCollidable(this);
   }
 }

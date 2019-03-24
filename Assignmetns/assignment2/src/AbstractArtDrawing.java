@@ -11,12 +11,15 @@ import java.util.Random;
  * @author zeiraid
  */
 public class AbstractArtDrawing {
+  private Line[] lines;
 
   /**
    * Default constructor, basically has nothing to initialize, since the class has
    * no members.
    */
   public AbstractArtDrawing() {
+    lines = new Line[10];
+
   }
 
   /**
@@ -26,10 +29,9 @@ public class AbstractArtDrawing {
    */
   public void drawRandomLines(DrawSurface d) {
     Random rand = new Random();
-    Line[] lines = new Line[10];
-    for (int i = 1; i < 10; i++) {
+    for (int i = 0; i < 10; i++) {
       Line line = generateRandomLine(rand);
-      drawLine(line, lines, d);
+      drawLine(line, d);
       lines[i] = line;
     }
   }
@@ -52,12 +54,10 @@ public class AbstractArtDrawing {
    * Draws the Line 'line', it's middle point and his intersection points (if they
    * exsist) with the other lines in the 'lines' array, to the surface 'd'.
    *
-   * @param line  the Line object to draw.
-   * @param lines an array of lines with which to calculate the intersection
-   *              points of.
-   * @param d     the DrawSurface object to draw the line and the points to.
+   * @param line the Line object to draw.
+   * @param d    the DrawSurface object to draw the line and the points to.
    */
-  private void drawLine(Line line, Line[] lines, DrawSurface d) {
+  private void drawLine(Line line, DrawSurface d) {
     d.setColor(Color.BLACK);
     int startX = (int) line.start().getX();
     int startY = (int) line.start().getY();

@@ -1,0 +1,7 @@
+public class GameTest1 {
+  public static void main(String[] args) {
+    Game game = new Game(400, 400);
+    game.initialize();
+    game.run();
+  }
+}

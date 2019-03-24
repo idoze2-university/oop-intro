@@ -28,6 +28,9 @@ public class Point {
    * @return the distance of this point to the other point.
    */
   public double distance(Point other) {
+    if (other == null) {
+      return -1;
+    }
     return Math.sqrt(Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2));
   }
 

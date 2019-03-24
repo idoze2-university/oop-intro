@@ -1,16 +1,17 @@
 import biuoop.DrawSurface;
 import java.awt.Color;
-import java.util.Random;
+import java.awt.List;
 
 /**
  * The Ball class implements a Ball object.
  *
  * @author zeiraid
  */
-public class Ball {
+public class Ball implements Sprite {
   private Point center;
   private int radius;
   private Color color;
+  private GameEnvironment map;
   private Velocity velocity;
 
   /**
@@ -20,10 +21,11 @@ public class Ball {
    * @param radius Size of the ball radius.
    * @param color  Color of the ball.
    */
-  public Ball(Point center, int radius, Color color) {
+  public Ball(Point center, int radius, Color color, GameEnvironment map) {
     this.center = center;
     this.radius = radius;
     this.color = color;
+    this.map = map;
   }
 
   /**
@@ -34,8 +36,8 @@ public class Ball {
    * @param radius Size of the ball radius.
    * @param color  Color of the ball.
    */
-  public Ball(double x, double y, int radius, Color color) {
-    this(new Point(x, y), radius, color);
+  public Ball(double x, double y, int radius, Color color, GameEnvironment map) {
+    this(new Point(x, y), radius, color, map);
   }
 
   /**
@@ -75,6 +77,14 @@ public class Ball {
     surface.setColor(color);
     surface.drawCircle((int) getX(), (int) getY(), radius);
     surface.fillCircle((int) getX(), (int) getY(), radius);
+    for (Line t : getTrajectory()) {
+      t.drawOn(surface);
+
+    }
+  }
+
+  public void timePassed() {
+    moveOneStep();
   }
 
   /**
@@ -103,14 +113,37 @@ public class Ball {
     return velocity;
   }
 
+  private Line[] getTrajectory() {
+    Line trajectory = new Line(center, velocity.applyToPoint(center));
+    trajectory = new Line(center, trajectory.end().addX(Math.signum(d)));
+    Line[] trajs = { trajectory, trajectory.getHorizonalComponent(), trajectory.getVerticalComponent() };
+    return trajs;
+  }
+
   /**
-   * Moves the ball one step using the Velocity, if the ball touches the frame,
-   * bounce it to the opposite direction, if no velocity, generate a random
-   * size-based velocity.
    *
-   * @param rand random initializer.
    */
-  public void moveOneStep(Random rand) {
-    center = velocity.applyToPoint(center);
+  public void moveOneStep() {
+    boolean colided = false;
+    for (Line trajectory : getTrajectory()) {
+      CollisionInfo col = map.getClosestCollision(trajectory);
+      if (col != null && !colided) {
+        colided = true;
+        Point colPt = col.collisionPoint();
+        double approachSpeed = center.distance(colPt) - radius;
+        double approachAngle = trajectory.getAngle();
+        Velocity reducedVelocity = Velocity.fromAngleAndSpeed(approachAngle, approachSpeed);
+        velocity = col.collisionObject().hit(colPt, velocity);
+        center = reducedVelocity.applyToPoint(center);
+      }
+    }
+    if (!colided) {
+      center = velocity.applyToPoint(center);
+    }
+
+  }
+
+  public void addToGame(Game g) {
+    g.addSprite(this);
   }
 }

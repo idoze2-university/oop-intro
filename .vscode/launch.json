@@ -6,10 +6,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - BouncingBallAnimation",
+            "name": "CodeLens (Launch) - AbstractArtDrawing",
             "request": "launch",
-            "mainClass": "BouncingBallAnimation",
+            "mainClass": "AbstractArtDrawing",
             "projectName": "assignment2"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - GameTest1",
+            "request": "launch",
+            "mainClass": "GameTest1",
+            "projectName": "assignment3"
         },
         {
             "type": "java",

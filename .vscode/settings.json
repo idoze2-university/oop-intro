@@ -1,3 +1,5 @@
 {
-    "java.format.settings.url": "eclipse-formatter.xml"
+    "java.format.settings.url": "eclipse-formatter.xml",
+    "checkstyle.configurationFile": "/home/uni/Desktop/University/biuoop.xml",
+    "checkstyle.version": "/home/uni/Desktop/University/checkstyle-5.7-all.jar"
 }
