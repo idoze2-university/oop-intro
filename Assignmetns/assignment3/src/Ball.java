@@ -77,9 +77,10 @@ public class Ball implements Sprite {
     surface.setColor(color);
     surface.drawCircle((int) getX(), (int) getY(), radius);
     surface.fillCircle((int) getX(), (int) getY(), radius);
+    Point pt = velocity.applyToPoint(center);
+    surface.fillCircle((int) pt.getX(), (int) pt.getY(), 4);
     for (Line t : getTrajectory()) {
       t.drawOn(surface);
-
     }
   }
 
@@ -115,8 +116,8 @@ public class Ball implements Sprite {
 
   private Line[] getTrajectory() {
     Line trajectory = new Line(center, velocity.applyToPoint(center));
-    trajectory = new Line(center, trajectory.end().addX(Math.signum(d)));
-    Line[] trajs = { trajectory, trajectory.getHorizonalComponent(), trajectory.getVerticalComponent() };
+    Line[] trajs = { trajectory.extend(radius), trajectory.getHorizonalComponent().extend(radius),
+        trajectory.getVerticalComponent().extend(radius) };
     return trajs;
   }
 
@@ -125,22 +126,26 @@ public class Ball implements Sprite {
    */
   public void moveOneStep() {
     boolean colided = false;
-    for (Line trajectory : getTrajectory()) {
+    Velocity reducedVelocity = velocity;
+    Line[] trajectories = getTrajectory();
+    for (Line trajectory : trajectories) {
       CollisionInfo col = map.getClosestCollision(trajectory);
-      if (col != null && !colided) {
+      if (col != null) {
         colided = true;
         Point colPt = col.collisionPoint();
         double approachSpeed = center.distance(colPt) - radius;
-        double approachAngle = trajectory.getAngle();
-        Velocity reducedVelocity = Velocity.fromAngleAndSpeed(approachAngle, approachSpeed);
-        velocity = col.collisionObject().hit(colPt, velocity);
-        center = reducedVelocity.applyToPoint(center);
+        double approachAngle = trajectories[0].getAngle();
+        if (approachSpeed < center.distance(reducedVelocity.applyToPoint(center))) {
+          reducedVelocity = Velocity.fromAngleAndSpeed(approachAngle, approachSpeed);
+          velocity = col.collisionObject().hit(colPt, velocity);
+        }
       }
     }
-    if (!colided) {
+    if (colided) {
+      center = reducedVelocity.applyToPoint(center);
+    } else {
       center = velocity.applyToPoint(center);
     }
-
   }
 
   public void addToGame(Game g) {

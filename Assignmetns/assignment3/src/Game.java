@@ -32,7 +32,7 @@ public class Game {
     sprites = new SpriteCollection();
 
     Ball ball = new Ball(170, 200, 15, Color.BLACK, environment);
-    ball.setVelocity(10,2);
+    ball.setVelocity(Velocity.fromAngleAndSpeed(30, 100));
     ball.addToGame(this);
 
     int padding = 20;
@@ -48,14 +48,14 @@ public class Game {
     Block bottom = new Block(0, height - padding, width, padding, Color.BLUE);
     bottom.addToGame(this);
 
-    Block b = new Block(49,50,30,10, Color.GREEN);
-    //b.addToGame(this);
+    Block b = new Block(50,60,60,100, Color.GREEN);
+    b.addToGame(this);
   }
 
   // Run the game -- start the animation loop.
   public void run() {
     Sleeper sleeper = new Sleeper();
-    int framesPerSecond = 30;
+    int framesPerSecond = 300;
     int millisecondsPerFrame = 1000 / framesPerSecond;
     while (true) {
       long startTime = System.currentTimeMillis(); // timing

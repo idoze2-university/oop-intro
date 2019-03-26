@@ -47,9 +47,9 @@ class Block implements Collidable, Sprite {
     } else if (collisionPoint.getX() >= collisionRectangle.getUpperLeft().getX() + collisionRectangle.getWidth()) {
       velocity = new Velocity(Math.abs(velocity.getDx()), velocity.getDy());
     }
-    if (collisionPoint.getY() <= collisionRectangle.getUpperLeft().getY()) {
+    if (collisionPoint.getY() <= collisionRectangle.getUpperLeft().getY() + 0.00001) {
       velocity = new Velocity(velocity.getDx(), -Math.abs(velocity.getDy()));
-    } else if (collisionPoint.getY() >= collisionRectangle.getUpperLeft().getY() + collisionRectangle.getHeight()) {
+    } else if (collisionPoint.getY()+0.00001 >= collisionRectangle.getUpperLeft().getY() + collisionRectangle.getHeight()) {
       velocity = new Velocity(velocity.getDx(), Math.abs(velocity.getDy()));
     }
     return velocity;
@@ -57,11 +57,11 @@ class Block implements Collidable, Sprite {
 
   public void drawOn(DrawSurface d) {
     d.setColor(color);
-    int x0 = (int) collisionRectangle.getUpperLeft().getX();
-    int y0 = (int) collisionRectangle.getUpperLeft().getY();
-    int x1 = x0 + (int) collisionRectangle.getWidth();
-    int y1 = y0 + (int) collisionRectangle.getHeight();
-    d.fillRectangle(x0, y0, x1, y1);
+    int x = (int) collisionRectangle.getUpperLeft().getX();
+    int y = (int) collisionRectangle.getUpperLeft().getY();
+    int width = (int) collisionRectangle.getWidth();
+    int height = (int) collisionRectangle.getHeight();
+    d.fillRectangle(x, y, width, height);
   }
 
   public void timePassed() {

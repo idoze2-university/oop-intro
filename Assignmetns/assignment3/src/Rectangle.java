@@ -38,7 +38,6 @@ class Rectangle {
     for (Line l : boundries) {
       Point pt = line.intersectionWith(l);
       if (pt != null) {
-
         lst.add(pt);
       }
     }

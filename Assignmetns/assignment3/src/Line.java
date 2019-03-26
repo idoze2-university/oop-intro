@@ -126,15 +126,18 @@ public class Line {
     double slope = slope();
     double otherSlope = other.slope();
     double intersectionX = start.getX();
+    double intersectionY = start.getY();
     if (isVertical()) {
       intersectionX = start.getX();
+      intersectionY = other.start.getY();
     } else if (other.isVertical()) {
       intersectionX = other.start.getX();
+      intersectionY = slope * intersectionX - slope * start.getX() + start.getY();
     } else {
       intersectionX = (slope * start.getX() - otherSlope * other.start.getX() + other.start.getY() - start.getY())
           / (slope - otherSlope);
+      intersectionY = slope * intersectionX - slope * start.getX() + start.getY();
     }
-    double intersectionY = slope * intersectionX - slope * start.getX() + start.getY();
     return new Point(intersectionX, intersectionY);
   }
 
@@ -144,7 +147,7 @@ public class Line {
    */
   private boolean isInLineSegment(Point p) {
     double slope = slope();
-    boolean isInLine = p.getY() + 0.000001 >= slope * p.getX() - slope * start.getX() + start.getY();
+    boolean isInLine = p.getY() + 0.00001 >= slope * p.getX() - slope * start.getX() + start.getY();
     boolean isInLineSegmentHorizonaly = false;
     if (start.getX() < end.getX()) {
       isInLineSegmentHorizonaly = p.getX() >= start.getX() && p.getX() <= end.getX();
@@ -155,9 +158,9 @@ public class Line {
     if (start.getY() < end.getY()) {
       isInLineSegmentVertically = p.getY() >= start.getY() && p.getY() <= end.getY();
     } else {
-      isInLineSegmentVertically = p.getY() <= start.getY() && p.getY() >= end.getY();
+      isInLineSegmentVertically = p.getY() <= start.getY()+ 0.00001 && p.getY()+ 0.00001 >= end.getY();
     }
-    return isInLine && (isInLineSegmentHorizonaly || isVertical()) && isInLineSegmentVertically;
+    return (isInLine && isInLineSegmentHorizonaly || isVertical()) && isInLineSegmentVertically;
   }
 
   /**
@@ -173,8 +176,10 @@ public class Line {
     if (other == null) {
       return false;
     }
-    boolean inLineSegment = isInLineSegment(lineIntersectionWith(other));
-    return !equals(other) && !isParralel(other) && inLineSegment;
+    Point inter = lineIntersectionWith(other);
+    boolean inLineSegment = isInLineSegment(inter);
+    boolean inOtherLineSegment = other.isInLineSegment(inter);
+    return !equals(other) && !isParralel(other) && inLineSegment && inOtherLineSegment;
 
   }
 
@@ -238,7 +243,11 @@ public class Line {
   public double getLength() {
     return start.distance(end);
   }
-
+  public Line extend(double delta)
+  {
+    Velocity transform = Velocity.fromAngleAndSpeed(getAngle(), getLength()+delta);
+    return new Line(start, transform.applyToPoint(start));
+  }
   public void drawOn(DrawSurface d) {
     d.setColor(java.awt.Color.RED);
     d.drawLine((int) start.getX(), (int) start.getY(), (int) end.getX(), (int) end.getY());

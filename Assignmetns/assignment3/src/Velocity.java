@@ -40,7 +40,7 @@ public class Velocity {
    * @return Point with applies dx and dy.
    */
   public Point applyToPoint(Point p) {
-    return p.add(dx,dy);
+    return p.add(dx, dy);
   }
 
   /**
@@ -56,5 +56,14 @@ public class Velocity {
     double dx = Math.cos(anglerd) * speed;
     double dy = Math.sin(anglerd) * -speed;
     return new Velocity(dx, dy);
+  }
+
+  public Velocity extend(double delta) {
+    Line traj = getTrajectory();
+    return Velocity.fromAngleAndSpeed(traj.getAngle(), traj.getLength() + delta);
+  }
+
+  public Line getTrajectory() {
+    return new Line(0, 0, dx, dy);
   }
 }
