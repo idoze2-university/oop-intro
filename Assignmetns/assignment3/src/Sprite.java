@@ -1,9 +1,20 @@
 import biuoop.DrawSurface;
 
+/**
+ * The Sprite interface implements an object which could be drawn to the screen.
+ *
+ * @author zeiraid 322607177
+ */
 public interface Sprite {
-  // draw the sprite to the screen
+  /**
+   * Draws the block to drawsurface d.
+   *
+   * @param d the surface on which the object should be drawn.
+   */
   void drawOn(DrawSurface d);
 
-  // notify the sprite that time has passed
+  /**
+   * Invokes a tick event.
+   */
   void timePassed();
 }

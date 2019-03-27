@@ -4,7 +4,7 @@ import java.awt.Color;
 /**
  * The Ball class implements a Ball object.
  *
- * @author zeiraid
+ * @author zeiraid 322607177
  */
 public class Ball implements Sprite {
   private Point center;
@@ -19,6 +19,7 @@ public class Ball implements Sprite {
    * @param center Point representing the center coordinates.
    * @param radius Size of the ball radius.
    * @param color  Color of the ball.
+   * @param map    The GameEnvironment in which the ball travels.
    */
   public Ball(Point center, int radius, Color color, GameEnvironment map) {
     this.center = center;
@@ -34,6 +35,7 @@ public class Ball implements Sprite {
    * @param y      Y coordinate of the center point.
    * @param radius Size of the ball radius.
    * @param color  Color of the ball.
+   * @param map    The GameEnvironment in which the ball travels.
    */
   public Ball(double x, double y, int radius, Color color, GameEnvironment map) {
     this(new Point(x, y), radius, color, map);
@@ -78,6 +80,9 @@ public class Ball implements Sprite {
     surface.fillCircle((int) getX(), (int) getY(), radius);
   }
 
+  /**
+   * Invokes a tick event.
+   */
   public void timePassed() {
     moveOneStep();
   }
@@ -92,56 +97,79 @@ public class Ball implements Sprite {
   }
 
   /**
-   * Sets the velocity of the ball to be v.
-   *
-   * @param dx the dx of the velocity to set on the ball.
-   * @param dy the dy of the velocity to set on the ball.
-   */
-  public void setVelocity(double dx, double dy) {
-    setVelocity(new Velocity(dx, dy));
-  }
-
-  /**
    * @return The Velocity object of the ball.
    */
   public Velocity getVelocity() {
     return velocity;
   }
 
-  private Line[] getTrajectory() {
+  /**
+   * calculates the trajectory line of the velocity and both of it's polar
+   * components.
+   *
+   * @return an array of lines consisting of the main vector, horizonal component,
+   *         vertical component.
+   */
+  private Line[] getTrajectoryComponents() {
     Line trajectory = new Line(center, velocity.applyToPoint(center));
-    Line[] trajs = { trajectory.extend(radius), trajectory.getHorizonalComponent().extend(radius),
+    Line[] trajs = {trajectory.extend(radius), trajectory.getHorizonalComponent().extend(radius),
         trajectory.getVerticalComponent().extend(radius) };
     return trajs;
   }
 
   /**
+   * 1) compute the ball trajectory (the trajectory is "how the ball will move
+   * without any obstacles" -- its a line starting at current location, and ending
+   * where the velocity will take the ball if no collisions will occur).
    *
+   * 2) Check (using the game environment) if moving on this trajectory will hit
+   * anything.
+   *
+   * 2.1) If no, then move the ball to the end of the trajectory.
+   *
+   * 2.2) Otherwise (there is a hit): 2.2.2) move the ball to "almost" the hit
+   * point, but just slightly before it. 2.2.3) notify the hit object (using its
+   * hit() method) that a collision occurred. 2.2.4) update the velocity to the
+   * new velocity returned by the hit() method.
    */
-  public void moveOneStep() {
+  private void moveOneStep() {
     boolean colided = false;
+    CollisionInfo col = null;
     Velocity reducedVelocity = velocity;
-    Line[] trajectories = getTrajectory();
+    Line[] trajectories = getTrajectoryComponents();
     for (Line trajectory : trajectories) {
-      CollisionInfo col = map.getClosestCollision(trajectory);
-      if (col != null) {
+      // Try to find a closest collision.
+      CollisionInfo currentCol = map.getClosestCollision(trajectory);
+      if (currentCol != null) {
+        // mark a collision found.
         colided = true;
-        Point colPt = col.collisionPoint();
+        Point colPt = currentCol.collisionPoint();
         double approachSpeed = center.distance(colPt) - radius;
         double approachAngle = trajectories[0].getAngle();
+        // if the collision in this component is closer than the component before,
+        // prefer to step less in the current trajectory.
         if (approachSpeed < center.distance(reducedVelocity.applyToPoint(center))) {
           reducedVelocity = Velocity.fromAngleAndSpeed(approachAngle, approachSpeed);
-          velocity = col.collisionObject().hit(colPt, velocity);
+          // save the found collision to 'col'.
+          col = currentCol;
         }
       }
     }
     if (colided) {
+      // move near collision point.
       center = reducedVelocity.applyToPoint(center);
+      // save the returned velocity upon hit.
+      velocity = col.collisionObject().hit(col.collisionPoint(), velocity);
     } else {
       center = velocity.applyToPoint(center);
     }
   }
 
+  /**
+   * adds the ball to game g's sprite list.
+   *
+   * @param g the game to which the ball should be added.
+   */
   public void addToGame(Game g) {
     g.addSprite(this);
   }

@@ -1,18 +1,20 @@
 import java.util.ArrayList;
 
 /**
- * The GameEnvironment Class implements an object which.
+ * The GameEnvironment Class implements an object which holds a collection of
+ * collidable objects.
+ *
+ * @author zeiraid 322607177
  */
 public class GameEnvironment {
 
   private ArrayList<Collidable> objects;
 
+  /**
+   * default constructor.
+   */
   public GameEnvironment() {
     objects = new ArrayList<Collidable>();
-  }
-
-  public void remove(Collidable object) {
-    objects.remove(object);
   }
 
   /**
@@ -36,7 +38,9 @@ public class GameEnvironment {
     Point closest = trajectory.end();
     for (Collidable obj : objects) {
       for (Point pt : obj.getCollisionRectangle().intersectionPoints(trajectory)) {
+        // if a collision is found with obj:
         if (pt != null) {
+          // get the closest intersection point (sort distance from start of trajectory)
           if (pt.distance(trajectory.start()) <= closest.distance(trajectory.start())) {
             closest = pt;
             ret = new CollisionInfo(pt, obj);

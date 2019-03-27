@@ -4,23 +4,35 @@ import java.awt.Color;
 /**
  * The Block class implements a block object which implements the Collidable
  * interface.
+ *
+ * @author zeiraid 322607177
  */
 class Block implements Collidable, Sprite {
 
-  protected Rectangle collisionRectangle;
-  protected Color color;
-  protected Game game;
+  private Rectangle collisionRectangle;
+  private Color color;
+  private Game game;
 
   /**
    * Default constructor.
    *
    * @param collisionRectangle the Collision rectangle of the block.
+   * @param color              the color of the block.
    */
   public Block(Rectangle collisionRectangle, Color color) {
     this.collisionRectangle = collisionRectangle;
     this.color = color;
   }
 
+  /**
+   * The overloading constructor.
+   *
+   * @param x      Upper Left Point's X Coordinate.
+   * @param y      Upper Left Point's Y Coordinate
+   * @param width  Block Rectangle Width.
+   * @param height Block Rectangle Height.
+   * @param color  the color of the block.
+   */
   public Block(double x, double y, double width, double height, Color color) {
     this(new Rectangle(x, y, width, height), color);
   }
@@ -30,6 +42,13 @@ class Block implements Collidable, Sprite {
    */
   public Rectangle getCollisionRectangle() {
     return collisionRectangle;
+  }
+
+  /**
+   * @return The game which contains the block.
+   */
+  protected Game getGame() {
+    return game;
   }
 
   /**
@@ -57,6 +76,11 @@ class Block implements Collidable, Sprite {
     return velocity;
   }
 
+  /**
+   * Draws the block to drawsurface d.
+   *
+   * @param d the surface on which the object should be drawn.
+   */
   public void drawOn(DrawSurface d) {
     d.setColor(color);
     int x = (int) collisionRectangle.getUpperLeft().getX();
@@ -66,9 +90,36 @@ class Block implements Collidable, Sprite {
     d.fillRectangle(x, y, width, height);
   }
 
+  /**
+   * moves the object delta times to the left.
+   *
+   * @param dx the distance to move.
+   */
+  public void moveLeft(double dx) {
+    moveRight(-dx);
+  }
+
+  /**
+   * moves the object delta times to the right.
+   *
+   * @param dx the distance to move.
+   */
+  public void moveRight(double dx) {
+    collisionRectangle.move(dx, 0);
+  }
+
+  /**
+   * Invokes a tick event.
+   */
   public void timePassed() {
     // nothing to do.
   }
+
+  /**
+   * Adds the block to g's sprite and collidable object arrays.
+   *
+   * @param g the game to which the object should be added.
+   */
   public void addToGame(Game g) {
     this.game = g;
     g.addSprite(this);

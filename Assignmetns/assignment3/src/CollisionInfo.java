@@ -2,6 +2,8 @@
  * The CollisionInfo class implements an object which holds information
  * regarding a collision of the object calling it with another object, at a
  * specific point.
+ *
+ * @author zeiraid 322607177
  */
 public class CollisionInfo {
 

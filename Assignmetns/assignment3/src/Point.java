@@ -4,7 +4,7 @@ import java.util.Random;
  * The Point class provides an implememntation of a Point object, with the
  * members: X coordinate, Y coordinate.
  *
- * @author zeiraid
+ * @author zeiraid 322607177
  */
 public class Point {
   private double x = 0;
@@ -35,11 +35,13 @@ public class Point {
   }
 
   /**
+   * avoids Floating Point Exception.
+   *
    * @param other the other point to compare with.
    * @return true is the points are equal, false otherwise
    */
   public boolean equals(Point other) {
-    return x == other.x && y == other.y;
+    return Math.abs(x - other.x) <= 0.00001 && Math.abs(y - other.y) <= 0.00001;
   }
 
   /**
@@ -51,14 +53,33 @@ public class Point {
     return x;
   }
 
+  /**
+   * moves the point by dx and dy.
+   *
+   * @param dx x-axis movement.
+   * @param dy y-axis movement.
+   * @return moved point.
+   */
   public Point add(double dx, double dy) {
     return new Point(x + dx, y + dy);
   }
 
+  /**
+   * moves the point by dx.
+   *
+   * @param dx x-axis movement.
+   * @return moved point.
+   */
   public Point addX(double dx) {
     return add(dx, 0);
   }
 
+  /**
+   * moves the point by dy.
+   *
+   * @param dy y-axis movement.
+   * @return moved point.
+   */
   public Point addY(double dy) {
     return add(0, dy);
   }

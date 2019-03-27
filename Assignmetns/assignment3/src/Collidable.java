@@ -1,3 +1,9 @@
+/**
+ * The Collidable interface provides the required methods for any object that
+ * could be collided with.
+ *
+ * @author zeiraid 322607177
+ */
 public interface Collidable {
 
   /**

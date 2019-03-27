@@ -4,7 +4,7 @@ import biuoop.DrawSurface;
  * The Line class implements an Line-Segment object, consisting of a starting
  * and and ending point, which enclose it.
  *
- * @author zeiraid.
+ * @author zeiraid 322607177
  */
 public class Line {
   private Point start;
@@ -158,7 +158,7 @@ public class Line {
     if (start.getY() < end.getY()) {
       isInLineSegmentVertically = p.getY() >= start.getY() && p.getY() <= end.getY();
     } else {
-      isInLineSegmentVertically = p.getY() <= start.getY()+ 0.00001 && p.getY()+ 0.00001 >= end.getY();
+      isInLineSegmentVertically = p.getY() <= start.getY() + 0.00001 && p.getY() + 0.00001 >= end.getY();
     }
     return (isInLine && isInLineSegmentHorizonaly || isVertical()) && isInLineSegmentVertically;
   }
@@ -189,8 +189,7 @@ public class Line {
    */
   public Point intersectionWith(Line other) {
     if (isIntersecting(other)) {
-      Point inter = lineIntersectionWith(other);
-      return inter;
+      return lineIntersectionWith(other);
     }
     return null;
   }
@@ -204,7 +203,7 @@ public class Line {
       return false;
     } else {
 
-      return start == other.start && end == other.end;
+      return start.equals(other.start) && end.equals(other.end);
     }
   }
 
@@ -227,27 +226,52 @@ public class Line {
 
   }
 
+  /**
+   * @return angle of the trajectory, compared to a horizonal vector with the same
+   *         starting point (Right angle).
+   */
   public double getAngle() {
     double randAngle = Math.atan2(deltaY(), -deltaX());
     return Math.toDegrees(randAngle);
   }
 
+  /**
+   * @return Horizonal component of the vector.
+   */
   public Line getHorizonalComponent() {
     return new Line(start, new Point(end.getX(), start.getY()));
   }
 
+  /**
+   * @return Vertical component of the vector.
+   */
   public Line getVerticalComponent() {
     return new Line(start, new Point(start.getX(), end.getY()));
   }
 
+  /**
+   * @return length of the vector.
+   */
   public double getLength() {
     return start.distance(end);
   }
-  public Line extend(double delta)
-  {
-    Velocity transform = Velocity.fromAngleAndSpeed(getAngle(), getLength()+delta);
+
+  /**
+   * extends the length of the line delta length.
+   *
+   * @param delta the length to extend the line with.
+   * @return extended line.
+   */
+  public Line extend(double delta) {
+    Velocity transform = Velocity.fromAngleAndSpeed(getAngle(), getLength() + delta);
     return new Line(start, transform.applyToPoint(start));
   }
+
+  /**
+   * Draws the block to drawsurface d.
+   *
+   * @param d the surface on which the object should be drawn.
+   */
   public void drawOn(DrawSurface d) {
     d.setColor(java.awt.Color.RED);
     d.drawLine((int) start.getX(), (int) start.getY(), (int) end.getX(), (int) end.getY());

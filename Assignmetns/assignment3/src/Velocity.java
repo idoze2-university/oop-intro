@@ -58,11 +58,9 @@ public class Velocity {
     return new Velocity(dx, dy);
   }
 
-  public Velocity extend(double delta) {
-    Line traj = getTrajectory();
-    return Velocity.fromAngleAndSpeed(traj.getAngle(), traj.getLength() + delta);
-  }
-
+  /**
+   * @return the trajectory describing the velocity.
+   */
   public Line getTrajectory() {
     return new Line(0, 0, dx, dy);
   }
