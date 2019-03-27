@@ -51,35 +51,37 @@ public class Game {
 
   /**
    * generates the border blocks bounding the game board.
+   *
+   * @param color the color for the borders.
    */
-  private void generateBorders() {
-    Block top = new Block(0, 0, width, padding, Color.BLUE);
+  private void generateBorders(Color color) {
+    Block top = new Block(0, 0, width, padding, color);
     top.addToGame(this);
-    Block left = new Block(0, 0, padding, height, Color.BLUE);
+    Block left = new Block(0, 0, padding, height, color);
     left.addToGame(this);
-    Block right = new Block(width - padding, 0, padding, height, Color.BLUE);
+    Block right = new Block(width - padding, 0, padding, height, color);
     right.addToGame(this);
-    Block bottom = new Block(0, height - padding, width, padding, Color.BLUE);
+    Block bottom = new Block(0, height - padding, width, padding, color);
     bottom.addToGame(this);
   }
 
   /**
    * Generates a block pattern for the specified level.
    *
-   * @param level       the seed for the size of the pattern.
+   * @param rows        the seed for the size of the pattern.
    * @param blockWidth  Width of each block in the pattern.
    * @param blockHeight Height of each block in the pattern.
    */
-  private void generatePattern(int level, double blockWidth, int blockHeight) {
+  private void generatePattern(int rows, double blockWidth, int blockHeight) {
     Random rand = new Random();
     int count = 3;
-    for (int row = 0; row < level; row++) {
+    for (int row = 0; row < rows; row++) {
       float[] hsbVals = Color.RGBtoHSB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), null); // Generates a
       Color color = Color.getHSBColor(hsbVals[0], hsbVals[1], hsbVals[2]); // random Color.
       double y = padding + 0.24 * (height - 2 * padding) + row * blockHeight;
-      for (int col = 1; col <= 2 * level - row; col++) {
+      for (int col = 1; col <= 2 * rows - row; col++) {
         double x = width - padding - col * blockWidth;
-        CountingBlock cb = new CountingBlock(x, y, blockWidth, blockHeight, color, level + rand.nextInt(count));
+        CountingBlock cb = new CountingBlock(x, y, blockWidth, blockHeight, color, count);
         cb.addToGame(this);
       }
       if (row == 0) {
@@ -129,9 +131,9 @@ public class Game {
     double paddleHeight = 20;
     KeyboardSensor keyboard = gui.getKeyboardSensor();
     addPaddle(width / 7, paddleHeight, keyboard);
-    generateBorders();
+    generateBorders(Color.BLACK);
     addBall(5);
-    generatePattern(6, width / (2 * (6) + 1), 20);
+    generatePattern(6, width / 13, 20);
 
   }
 
@@ -142,15 +144,12 @@ public class Game {
     Sleeper sleeper = new Sleeper();
     int framesPerSecond = 120;
     int millisecondsPerFrame = 1000 / framesPerSecond;
-    int level = 6;
     while (true) {
       long startTime = System.currentTimeMillis(); // timing
       DrawSurface d = gui.getDrawSurface();
       d.setColor(Color.DARK_GRAY);
       d.fillRectangle(0, 0, (int) width, (int) height);
-      int textSize = 100;
       d.setColor(Color.RED);
-      d.drawText((int) (width - textSize) / 2, (int) (height - textSize) / 2, String.valueOf(level), textSize);
       this.sprites.drawAllOn(d);
       gui.show(d);
       this.sprites.notifyAllTimePassed();
