@@ -12,10 +12,22 @@ public class SpriteCollection {
     sprites.add(s);
   }
 
+  public int count()
+{
+  return sprites.size();
+}
+  public void remove(Sprite s) {
+    sprites.remove(s);
+  }
+
   // call timePassed() on all sprites.
   public void notifyAllTimePassed() {
-    for (Sprite s : sprites) {
-      s.timePassed();
+    try {
+      for (Sprite s : sprites) {
+        s.timePassed();
+      }
+    } catch (Exception e) {
+      // TODO: handle exception
     }
     ;
   }

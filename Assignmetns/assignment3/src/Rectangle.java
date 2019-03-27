@@ -64,4 +64,10 @@ class Rectangle {
   public double getHeight() {
     return height;
   }
+
+  public void move(double dx,double dy)
+  {
+    Velocity transformation = new Velocity(dx,dy);
+    upperLeft = transformation.applyToPoint(upperLeft);
+  }
 }

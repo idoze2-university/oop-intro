@@ -11,6 +11,10 @@ public class GameEnvironment {
     objects = new ArrayList<Collidable>();
   }
 
+  public void remove(Collidable object) {
+    objects.remove(object);
+  }
+
   /**
    * add the given collidable to the environment.
    *

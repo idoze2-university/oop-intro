@@ -1,6 +1,5 @@
 import biuoop.DrawSurface;
 import java.awt.Color;
-import java.awt.List;
 
 /**
  * The Ball class implements a Ball object.
@@ -77,11 +76,6 @@ public class Ball implements Sprite {
     surface.setColor(color);
     surface.drawCircle((int) getX(), (int) getY(), radius);
     surface.fillCircle((int) getX(), (int) getY(), radius);
-    Point pt = velocity.applyToPoint(center);
-    surface.fillCircle((int) pt.getX(), (int) pt.getY(), 4);
-    for (Line t : getTrajectory()) {
-      t.drawOn(surface);
-    }
   }
 
   public void timePassed() {

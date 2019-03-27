@@ -7,8 +7,9 @@ import java.awt.Color;
  */
 class Block implements Collidable, Sprite {
 
-  private Rectangle collisionRectangle;
-  private Color color;
+  protected Rectangle collisionRectangle;
+  protected Color color;
+  protected Game game;
 
   /**
    * Default constructor.
@@ -49,7 +50,8 @@ class Block implements Collidable, Sprite {
     }
     if (collisionPoint.getY() <= collisionRectangle.getUpperLeft().getY() + 0.00001) {
       velocity = new Velocity(velocity.getDx(), -Math.abs(velocity.getDy()));
-    } else if (collisionPoint.getY()+0.00001 >= collisionRectangle.getUpperLeft().getY() + collisionRectangle.getHeight()) {
+    } else if (collisionPoint.getY() + 0.00001 >= collisionRectangle.getUpperLeft().getY()
+        + collisionRectangle.getHeight()) {
       velocity = new Velocity(velocity.getDx(), Math.abs(velocity.getDy()));
     }
     return velocity;
@@ -67,8 +69,8 @@ class Block implements Collidable, Sprite {
   public void timePassed() {
     // nothing to do.
   }
-
   public void addToGame(Game g) {
+    this.game = g;
     g.addSprite(this);
     g.addCollidable(this);
   }
