@@ -100,7 +100,7 @@ public class Game {
     Ball ball = new Ball((width - radius) / 2.0, height - padding - radius - paddleWidth, radius, Color.white,
         environment);
     Random r = new Random();
-    ball.setVelocity(Velocity.fromAngleAndSpeed(r.nextInt(90) - 120, r.nextInt(3) + 5));
+    ball.setVelocity(Velocity.fromAngleAndSpeed(r.nextInt(90) - 120, r.nextInt(3) + 50));
     ball.addToGame(this);
   }
 
@@ -132,7 +132,9 @@ public class Game {
     KeyboardSensor keyboard = gui.getKeyboardSensor();
     addPaddle(width / 7, paddleHeight, keyboard);
     generateBorders(Color.BLACK);
-    addBall(5);
+    for (int i = 0; i < 9; i++) {
+      addBall(5);
+    }
     generatePattern(6, width / 13, 20);
 
   }
@@ -142,7 +144,7 @@ public class Game {
    */
   public void run() {
     Sleeper sleeper = new Sleeper();
-    int framesPerSecond = 120;
+    int framesPerSecond = 300;
     int millisecondsPerFrame = 1000 / framesPerSecond;
     while (true) {
       long startTime = System.currentTimeMillis(); // timing

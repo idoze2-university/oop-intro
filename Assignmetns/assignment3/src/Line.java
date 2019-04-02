@@ -156,7 +156,7 @@ public class Line {
     }
     boolean isInLineSegmentVertically = false;
     if (start.getY() < end.getY()) {
-      isInLineSegmentVertically = p.getY() >= start.getY() && p.getY() <= end.getY();
+      isInLineSegmentVertically = p.getY()+ 0.00001 >= start.getY() && p.getY() <= end.getY()+ 0.00001;
     } else {
       isInLineSegmentVertically = p.getY() <= start.getY() + 0.00001 && p.getY() + 0.00001 >= end.getY();
     }
