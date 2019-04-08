@@ -126,14 +126,14 @@ public class Game {
     gui = new GUI("myGame", (int) width, (int) height);
     environment = new GameEnvironment();
     sprites = new SpriteCollection();
-    padding = 2;
+    padding = 14;
 
     double paddleHeight = 20;
     KeyboardSensor keyboard = gui.getKeyboardSensor();
     addPaddle(width / 7, paddleHeight, keyboard);
     generateBorders(Color.BLACK);
-    for (int i = 0; i < 9; i++) {
-      addBall(5);
+    for (int i = 0; i < 30; i++) {
+      addBall(30);
     }
     generatePattern(6, width / 13, 20);
 
@@ -144,7 +144,7 @@ public class Game {
    */
   public void run() {
     Sleeper sleeper = new Sleeper();
-    int framesPerSecond = 300;
+    int framesPerSecond = 120;
     int millisecondsPerFrame = 1000 / framesPerSecond;
     while (true) {
       long startTime = System.currentTimeMillis(); // timing
