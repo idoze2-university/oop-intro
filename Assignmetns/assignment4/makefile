@@ -1,8 +1,8 @@
 compile: bin
-	javac -d bin -cp ./biuoop*.jar src/*.java
+	javac -d bin -cp src/*.java
 
 run: compile
-	java -cp ./biuoop*.jar:bin Test1
+	java -cp bin ExpressionTest
 
 bin:
 	mkdir bin
