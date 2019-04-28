@@ -1,8 +1,7 @@
-import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-class ExpressiosTest {
+ public class ExpressionTest {
   public static void main(String[] args) throws Exception {
     // (2x) + (sin(4y)) + (e^x)
     Expression e1 = new Mult(2, "x");
