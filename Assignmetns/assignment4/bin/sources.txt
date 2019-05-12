@@ -1,0 +1,16 @@
+src/BaseExpression.java
+src/Log.java
+src/Num.java
+src/Minus.java
+src/Cos.java
+src/ExpressionTest.java
+src/Mult.java
+src/UnaryExpression.java
+src/Pow.java
+src/BinaryExpression.java
+src/Expression.java
+src/Plus.java
+src/Sin.java
+src/Neg.java
+src/Div.java
+src/Var.java

@@ -1,7 +1,9 @@
+#zeiraid
+#322607177
 compile: bin
 	javac -d bin src/*.java
 
-run: compile
+run:
 	java -cp bin ExpressionTest
 
 bin:

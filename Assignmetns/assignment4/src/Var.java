@@ -9,10 +9,18 @@ import java.util.Map;
 public class Var implements Expression {
   private String label;
 
+  /**
+   * Default Constructor.
+   *
+   * @param label the label to assign the variable.
+   */
   public Var(String label) {
     this.label = label.toLowerCase();
   }
 
+  /**
+   * @return the variable label.
+   */
   public String getLabel() {
     return label;
   }
@@ -76,6 +84,13 @@ public class Var implements Expression {
     return a;
   }
 
+  /**
+   * Returns the expression tree resulting from differentiating the current
+   * expression relative to variable `var`.
+   *
+   * @param var Variable to differentiate by.
+   * @return the expression result.
+   */
   public Expression differentiate(String var) {
     if (var.toLowerCase() == label) {
       return new Num(1);
@@ -84,6 +99,11 @@ public class Var implements Expression {
     }
   }
 
+  /**
+   * Simplifies the current expression and returns its simplified value.
+   *
+   * @return a simplified version of the current expression
+   */
   public Expression simplify() {
     return this;
   }

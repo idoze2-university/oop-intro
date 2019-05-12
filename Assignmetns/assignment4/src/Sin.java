@@ -1,17 +1,37 @@
+/**
+ * The Sin class extends the UnaryExpression class and implements a sin
+ * operation expression Sin(a).
+ */
 class Sin extends UnaryExpression {
 
+  /**
+   * Default Constructor.
+   *
+   * @param a an Expression.
+   **/
   public Sin(Expression a) {
     super(a);
   }
 
+  /**
+   * Overloading Constructor.
+   *
+   * @param a a String.
+   **/
   public Sin(String a) {
     this(new Var(a));
   }
 
+  /**
+   * Overloading Constructor.
+   *
+   * @param a a double.
+   **/
   public Sin(double a) {
     this(new Num(a));
   }
-/**
+
+  /**
    * A convenience method. Like the `evaluate(assignment)` method above, but uses
    * an empty assignment.
    *
@@ -22,6 +42,7 @@ class Sin extends UnaryExpression {
   public double evaluate() throws Exception {
     return Math.sin(getA().evaluate());
   }
+
   /**
    * Returns a new expression in which all occurrences of the variable var are
    * replaced with the provided expression (Does not modify the current
@@ -33,9 +54,10 @@ class Sin extends UnaryExpression {
    *         provided expression.
    */
   public Expression assign(String var, Expression expression) {
-    Expression a = getA().assign(var, expression);
+    Expression a = this.getA().assign(var, expression);
     return new Sin(a);
   }
+
   /**
    * @return Returns a nice string representation of the expression.
    */
@@ -43,6 +65,13 @@ class Sin extends UnaryExpression {
     return "Sin(" + getA().toString() + ")";
   }
 
+  /**
+   * Returns the expression tree resulting from differentiating the current
+   * expression relative to variable `var`.
+   *
+   * @param var Variable to differentiate by.
+   * @return the expression result.
+   */
   public Expression differentiate(String var) {
     return new Mult(new Cos(getA()), getA().differentiate(var));
   }

@@ -1,9 +1,18 @@
 import java.util.Map;
 import java.util.TreeMap;
 
- public class ExpressionTest {
+/**
+ * The ExpressionTest Class implements a static operation of testing the
+ * Expression interface and it's child classes.
+ */
+public class ExpressionTest {
+  /**
+   * Main method.
+   *
+   * @param args CLI arguments.
+   * @throws Exception Exception if an evaluation is preformed incorrectly.
+   */
   public static void main(String[] args) throws Exception {
-    // (2x) + (sin(4y)) + (e^x)
     Expression e1 = new Mult(2, "x");
     Expression e2 = new Sin(new Mult(4, "y"));
     Expression e3 = new Pow("e", "x");
@@ -18,5 +27,6 @@ import java.util.TreeMap;
     System.out.println(de.toString());
     System.out.println(de.evaluate(assignment));
     System.out.println(de.simplify().toString());
+
   }
 }

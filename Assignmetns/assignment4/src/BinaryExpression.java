@@ -2,14 +2,40 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * The UnaryExpression class extends the BaseExpression class and implements an
+ * expression which holds two inner expressions.
+ */
 class BinaryExpression extends BaseExpression {
-  protected Expression b;
+  private Expression bField;
 
-  public BinaryExpression(Expression a, Expression b) {
+  /**
+   * Default Constructor.
+   *
+   * @param a inner expression a.
+   * @param b inner expression b.
+   */
+  protected BinaryExpression(Expression a, Expression b) {
     super(a);
-    this.b = b;
+    this.setB(b);
   }
- /**
+
+  /**
+   * @param b the b to set
+   */
+  protected void setB(Expression b) {
+    this.bField = b;
+  }
+
+  /**
+   * @return inner expression b.
+   */
+  protected Expression getB() {
+    return bField;
+  }
+
+  @Override
+  /**
    * Evaluate the expression using the variable values provided in the assignment,
    * and return the result.
    *
@@ -19,18 +45,25 @@ class BinaryExpression extends BaseExpression {
    *                   assignment, an exception is thrown.
    */
   public double evaluate(Map<String, Double> assignment) throws Exception {
-    for (String var : getVariables()) {
+    Expression orgA = getA();
+    Expression orgB = getB();
+    List<String> vars = getVariables();
+    for (String var : vars) {
       Double value = assignment.get(var);
       if (value != null) {
-        a = a.assign(var, new Num(value));
-        b = b.assign(var, new Num(value));
+        setA(getA().assign(var, new Num(value)));
+        setB(getB().assign(var, new Num(value)));
       } else {
         throw new Exception();
       }
     }
-    return evaluate();
+    double eval = evaluate();
+    setA(orgA);
+    setB(orgB);
+    return eval;
   }
-/**
+
+  /**
    * Returns a new expression in which all occurrences of the variable var are
    * replaced with the provided expression (Does not modify the current
    * expression).
@@ -41,20 +74,26 @@ class BinaryExpression extends BaseExpression {
    *         provided expression.
    */
   public Expression assign(String var, Expression expression) {
-    Expression a = this.a.assign(var, expression);
-    Expression b = this.b.assign(var, expression);
+    Expression a = getA().assign(var, expression);
+    Expression b = getB().assign(var, expression);
     return new BinaryExpression(a, b);
   }
-/**
+
+  /**
    * @return Returns a list of the variables in the expression.
    */
   public List<String> getVariables() {
     ArrayList<String> vars = new ArrayList<String>();
     vars.addAll(super.getVariables());
-    vars.addAll(b.getVariables());
+    for (String var : getB().getVariables()) {
+      if (!vars.contains(var)) {
+        vars.add(var);
+      }
+    }
     return vars;
   }
-/**
+
+  /**
    * Returns the expression tree resulting from differentiating the current
    * expression relative to variable `var`.
    *
@@ -63,8 +102,8 @@ class BinaryExpression extends BaseExpression {
    */
   public Expression differentiate(String var) {
     BinaryExpression de = this;
-    de.a = de.a.differentiate(var);
-    de.b = de.b.differentiate(var);
+    de.setA(de.getA().differentiate(var));
+    de.setB(de.getB().differentiate(var));
     return de;
   }
 

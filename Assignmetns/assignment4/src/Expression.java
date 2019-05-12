@@ -66,4 +66,4 @@ public interface Expression {
    *                   assignment, an exception is thrown.
    */
   Expression simplify() throws Exception;
- }
+}

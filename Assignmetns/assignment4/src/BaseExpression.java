@@ -2,23 +2,34 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * The BaseExpression class implements the Expression interface and is the
+ * foundation of an unary expression.
+ */
 class BaseExpression implements Expression {
-  protected Expression a;
+  private Expression aField;
 
-  public BaseExpression(Expression a) {
-    this.a = a;
+  /**
+   * Default Constructor.
+   *
+   * @param a inner expression a.
+   */
+  protected BaseExpression(Expression a) {
+    this.setA(a);
   }
 
-  public Expression getA() {
-    return a;
+  /**
+   * @param a the a to set
+   */
+  protected void setA(Expression a) {
+    this.aField = a;
   }
 
-  public BaseExpression(double a) {
-    this(new Num(a));
-  }
-
-  public BaseExpression(String a) {
-    this(new Var(a));
+  /**
+   * @return inner expression a.
+   */
+  protected Expression getA() {
+    return aField;
   }
 
   /**
@@ -31,15 +42,18 @@ class BaseExpression implements Expression {
    *                   assignment, an exception is thrown.
    */
   public double evaluate(Map<String, Double> assignment) throws Exception {
+    Expression orgA = getA();
     for (String var : getVariables()) {
       Double value = assignment.get(var);
       if (value != null) {
-        a = a.assign(var, new Num(value));
+        setA(getA().assign(var, new Num(value)));
       } else {
         throw new Exception();
       }
     }
-    return evaluate();
+    double eval = evaluate();
+    setA(orgA);
+    return eval;
   }
 
   /**
@@ -65,8 +79,8 @@ class BaseExpression implements Expression {
    *         provided expression.
    */
   public Expression assign(String var, Expression expression) {
-    a = a.assign(var, expression);
-    return new BaseExpression(a);
+    setA(getA().assign(var, expression));
+    return new BaseExpression(getA());
   }
 
   /**
@@ -74,7 +88,11 @@ class BaseExpression implements Expression {
    */
   public List<String> getVariables() {
     ArrayList<String> vars = new ArrayList<String>();
-    vars.addAll(a.getVariables());
+    for (String var : getA().getVariables()) {
+      if (!vars.contains(var)) {
+        vars.add(var);
+      }
+    }
     return vars;
   }
 
@@ -87,10 +105,17 @@ class BaseExpression implements Expression {
    */
   public Expression differentiate(String var) {
     BaseExpression de = this;
-    de.a = de.a.differentiate(var);
+    de.setA(de.getA().differentiate(var));
     return de;
   }
 
+  /**
+   * Simplifies the current expression and returns its simplified value.
+   *
+   * @return a simplified version of the current expression
+   * @throws Exception If the expression contains a variable which is not in the
+   *                   assignment, an exception is thrown.
+   */
   public Expression simplify() throws Exception {
     return this;
   }
