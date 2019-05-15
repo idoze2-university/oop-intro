@@ -6,38 +6,17 @@
     "configurations": [
         {
             "type": "java",
-            "name": "CodeLens (Launch) - Ass3",
+            "name": "CodeLens (Launch) - Ass5",
             "request": "launch",
-            "mainClass": "Ass3",
+            "mainClass": "Ass5",
+            "projectName": "assignment5"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Ass5",
+            "request": "launch",
+            "mainClass": "Ass5",
             "projectName": "assignment3 (2)"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - ExpressionTest",
-            "request": "launch",
-            "mainClass": "ExpressionTest",
-            "projectName": "assignment4"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - Test1",
-            "request": "launch",
-            "mainClass": "Test1",
-            "projectName": "assignment4"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - AbstractArtDrawing",
-            "request": "launch",
-            "mainClass": "AbstractArtDrawing",
-            "projectName": "assignment2"
-        },
-        {
-            "type": "java",
-            "name": "CodeLens (Launch) - GameTest1",
-            "request": "launch",
-            "mainClass": "GameTest1",
-            "projectName": "assignment3"
         },
         {
             "type": "java",

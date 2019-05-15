@@ -47,7 +47,7 @@ public class Rectangle {
   public List<Point> intersectionPoints(Line line) {
     ArrayList<Point> lst = new ArrayList<Point>();
     Line[] boundries = // Array of Boundry Lines.
-        {new Line(upperLeft, upperLeft.addX(width)), // Upper Boundry.
+        { new Line(upperLeft, upperLeft.addX(width)), // Upper Boundry.
             new Line(upperLeft, upperLeft.addY(height)), // Left Boundry.
             new Line(upperLeft.addY(height), upperLeft.add(width, height)), // Lower Boundry.
             new Line(upperLeft.addX(width), upperLeft.add(width, height)) }; // Right Boundry.
