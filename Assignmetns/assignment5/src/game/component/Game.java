@@ -28,9 +28,13 @@ public class Game {
   private double paddleHeight;
   private SpriteCollection sprites;
   private GameEnvironment environment;
+  private Paddle currentPaddle;
   private Counter remainingBlocks;
   private Counter remainingBalls;
   private Counter scoreCounter;
+  private Counter currentLevel;
+  private LivesIndicator lives;
+  private KeyboardSensor keyboard;
   private GUI gui;
 
   /**
@@ -53,6 +57,11 @@ public class Game {
     environment.addCollidable(c);
   }
 
+  /**
+   * Removes a collidable object to the board.
+   *
+   * @param c the object to Remove.
+   */
   public void removeCollidable(Collidable c) {
     environment.remove(c);
   }
@@ -66,6 +75,11 @@ public class Game {
     sprites.addSprite(s);
   }
 
+  /**
+   * Removes a sprite object to the board.
+   *
+   * @param s the object to remove.
+   */
   public void removeSprite(Sprite s) {
     sprites.remove(s);
   }
@@ -90,14 +104,16 @@ public class Game {
   /**
    * Generates a block pattern for the specified level.
    *
-   * @param rows        the seed for the size of the pattern.
    * @param blockWidth  Width of each block in the pattern.
    * @param blockHeight Height of each block in the pattern.
-   * @param listeners   HitListeners to listen for all the pattern's created
-   *                    blocks.
    */
-  private void generatePattern(int rows, double blockWidth, int blockHeight, ArrayList<HitListener> listeners) {
+  private void generatePattern(double blockWidth, int blockHeight) {
     Random rand = new Random();
+    remainingBlocks = new Counter();
+    ArrayList<HitListener> listeners = new ArrayList<HitListener>();
+    listeners.add(new BlockRemover(this, remainingBlocks));
+    listeners.add(new ScoreTrackingListener(scoreCounter));
+    int rows = currentLevel.getValue();
     int count = 3;
     for (int row = 0; row < rows; row++) {
       float[] hsbVals = Color.RGBtoHSB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), null); // Generates a
@@ -136,47 +152,59 @@ public class Game {
   /**
    * Creates a movable collidable paddle.
    *
-   * @param pWidth   width of the paddle.
-   * @param pHeight  height of the paddle.
-   * @param keyboard KeyboardSensor object which contains the information about
-   *                 which keys are pressed.
+   * @param pWidth  width of the paddle.
+   * @param pHeight height of the paddle.
    */
-  private void addPaddle(double pWidth, double pHeight, KeyboardSensor keyboard) {
-    Paddle p = new Paddle(width, height, pWidth, pHeight, padding, Color.ORANGE, keyboard);
-    p.addToGame(this);
+  private void addPaddle(double pWidth, double pHeight) {
+    if (currentPaddle != null) {
+      currentPaddle.removeFromGame(this);
+    }
+    currentPaddle = new Paddle(width, height, pWidth, pHeight, padding, Color.ORANGE, keyboard);
+    currentPaddle.addToGame(this);
   }
 
   /**
-   * Initialize a new game: create the Blocks and Ball (and Paddle) and add them
+   * Initialize a new game: create the Blocks and Balls (and Paddle) and add them
    * to the game.
    */
-  public void initialize() {
+  public void initGame() {
     gui = new GUI("myGame", (int) width, (int) height);
     environment = new GameEnvironment();
     sprites = new SpriteCollection();
-    sprites.addSprite(new LivesIndicator(null, 0));
-    padding = 14;
     scoreCounter = new Counter();
-    this.paddleHeight = 20;
-    KeyboardSensor keyboard = gui.getKeyboardSensor();
     remainingBalls = new Counter();
+    currentLevel = new Counter(4);
+    lives = new LivesIndicator(new Point(0, 10), 4);
+    keyboard = gui.getKeyboardSensor();
     generateBorders(Color.BLACK);
-    for (int i = 0; i < 3; i++) {
+    sprites.addSprite(lives);
+    padding = 14;
+    paddleHeight = 20;
+    generatePattern(width / 13, 20);
+  }
+
+  /**
+   * Initialize a new turn: create the Blocks and Balls (and Paddle) and add them
+   * to the game.
+   *
+   * @param balls the amount of balls to generate.
+   */
+  public void initTurn(int balls) {
+    for (int i = 0; i < balls; i++) {
       addBall(5);
     }
-    addPaddle(width / 7, paddleHeight, keyboard);
-    remainingBlocks = new Counter();
-    ArrayList<HitListener> blockListeners = new ArrayList<HitListener>();
-    blockListeners.add(new BlockRemover(this, remainingBlocks));
-    blockListeners.add(new ScoreTrackingListener(scoreCounter));
-    generatePattern(6, width / 13, 20, blockListeners);
+    addPaddle(width / 7, paddleHeight);
   }
 
   /**
    * Run the game -- start the animation loop.
    */
   public void run() {
-    playOneTurn();
+    initGame();
+    while (lives.getLives() > 0) {
+      initTurn(2);
+      playOneTurn();
+    }
     gui.close();
   }
 
@@ -187,8 +215,7 @@ public class Game {
     Sleeper sleeper = new Sleeper();
     int framesPerSecond = 120;
     int millisecondsPerFrame = 1000 / framesPerSecond;
-    while (remainingBalls.getValue() > 0) {
-
+    while (true) {
       long startTime = System.currentTimeMillis(); // timing
       DrawSurface d = gui.getDrawSurface();
       d.setColor(Color.DARK_GRAY);
@@ -210,6 +237,12 @@ public class Game {
       }
       if (remainingBlocks.getValue() == 0) {
         scoreCounter.increase(100);
+        currentLevel.increase(1);
+        generatePattern(width / 13, 20);
+        addBall(5);
+      }
+      if (remainingBalls.getValue() == 0) {
+        lives.decrease();
         break;
       }
     }

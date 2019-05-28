@@ -6,6 +6,26 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Ass6Game",
+            "request": "launch",
+            "mainClass": "src.Ass6Game",
+            "projectName": "OOP1_f0461d4f"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Ass6Game",
+            "request": "launch",
+            "mainClass": "Ass6Game"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Ass5Game",
+            "request": "launch",
+            "mainClass": "Ass5Game",
+            "projectName": "assignment5"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Ass5",
             "request": "launch",
             "mainClass": "Ass5",
