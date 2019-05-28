@@ -4,7 +4,6 @@ import biuoop.DrawSurface;
 import biuoop.Sleeper;
 import game.animation.Animation;
 import game.component.SpriteCollection;
-import java.awt.Color;
 
 /**
  *
@@ -37,15 +36,14 @@ public class CountdownAnimation implements Animation {
   @Override
   public void doOneFrame(DrawSurface d) {
     gameScreen.drawAllOn(d);
-    if(curr!=0)
-    {
+    if (curr != 0) {
       d.drawText(400, 300, String.valueOf(curr), 10);
     }
-      Sleeper s = new Sleeper();
-      if (curr != countFrom) {
-        s.sleepFor((long) (numOfSeconds * 1000 / countFrom));
-      }
-      curr--;
+    Sleeper s = new Sleeper();
+    if (curr != countFrom) {
+      s.sleepFor((long) (numOfSeconds * 1000 / countFrom));
+    }
+    curr--;
   }
 
   @Override

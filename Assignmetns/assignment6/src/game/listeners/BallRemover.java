@@ -1,6 +1,6 @@
 package game.listeners;
 
-import game.component.Game;
+import game.component.GameLevel;
 import game.component.Block;
 import game.component.Ball;
 import utillity.Counter;
@@ -10,7 +10,7 @@ import utillity.Counter;
  * keeping count of the number of blocks that remain.
  */
 public class BallRemover implements HitListener {
-  private Game game;
+  private GameLevel game;
   private Counter remainingBalls;
 
   /**
@@ -19,7 +19,7 @@ public class BallRemover implements HitListener {
    * @param game           that holds the listener.
    * @param remainingBalls counter that indicates the amount of remaining balls.
    */
-  public BallRemover(Game game, Counter remainingBalls) {
+  public BallRemover(GameLevel game, Counter remainingBalls) {
     this.game = game;
     this.remainingBalls = remainingBalls;
   }

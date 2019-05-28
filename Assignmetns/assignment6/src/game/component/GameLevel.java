@@ -25,7 +25,7 @@ import utillity.Counter;
  *
  * @author zeiraid 322607177
  */
-public class Game implements Animation {
+public class GameLevel implements Animation {
   private double width;
   private double height;
   private double padding;
@@ -48,7 +48,7 @@ public class Game implements Animation {
    * @param width  Width of the board.
    * @param height Height of the board.
    */
-  public Game(double width, double height) {
+  public GameLevel(double width, double height) {
     this.width = width;
     this.height = height;
   }
@@ -231,7 +231,6 @@ public class Game implements Animation {
   @Override
   public void doOneFrame(DrawSurface d) {
     d.setColor(Color.WHITE);
-    int textSize = 100;
     d.setColor(Color.RED);
     this.sprites.drawAllOn(d);
     this.sprites.notifyAllTimePassed();

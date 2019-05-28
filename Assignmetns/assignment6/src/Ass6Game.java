@@ -1,4 +1,4 @@
-import game.component.Game;
+import game.component.GameLevel;
 
 /**
  * The Ass5 implements an Arkanoid game using the Game class.
@@ -12,7 +12,7 @@ public class Ass6Game {
    * @param args command line arguments.
    */
   public static void main(String[] args) {
-    Game game = new Game(800, 600);
+    GameLevel game = new GameLevel(800, 600);
     game.run();
   }
 }

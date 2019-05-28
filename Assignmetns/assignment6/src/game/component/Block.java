@@ -20,7 +20,7 @@ public class Block implements Collidable, Sprite, HitNotifier {
 
   private Rectangle collisionRectangle;
   private Color color;
-  private Game game;
+  private GameLevel game;
   private ArrayList<HitListener> hitListeners;
 
   /**
@@ -56,7 +56,7 @@ public class Block implements Collidable, Sprite, HitNotifier {
   /**
    * @return The game which contains the block.
    */
-  protected Game getGame() {
+  protected GameLevel getGame() {
     return game;
   }
 
@@ -116,7 +116,7 @@ public class Block implements Collidable, Sprite, HitNotifier {
    *
    * @param g the game to which the object should be added.
    */
-  public void addToGame(Game g) {
+  public void addToGame(GameLevel g) {
     this.game = g;
     g.addSprite(this);
     g.addCollidable(this);
@@ -127,7 +127,7 @@ public class Block implements Collidable, Sprite, HitNotifier {
    *
    * @param g The game to be removed from.
    */
-  public void removeFromGame(Game g) {
+  public void removeFromGame(GameLevel g) {
     g.removeSprite(this);
     g.removeCollidable(this);
   }
