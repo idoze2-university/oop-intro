@@ -7,13 +7,13 @@ compile: bin
 	rm sources.txt
 
 jar: compile
-	jar cfm ass5game.jar Manifest.mf -C bin .
+	jar cfm ass6game.jar Manifest.mf -C bin .
 
 run: jar
-	java -jar ass5game.jar
+	java -jar ass6game.jar 1 2 3 4
 
 bin:
 	mkdir bin
 
 clean:
-	rm -rf bin ass5game.jar
+	rm -rf bin ass6game.jar

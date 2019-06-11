@@ -2,21 +2,20 @@ package game.component;
 
 import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Random;
-
+import java.util.List;
 import biuoop.DrawSurface;
-import biuoop.GUI;
 import biuoop.KeyboardSensor;
 import game.animation.Animation;
 import game.animation.AnimationRunner;
+import game.animation.KeyPressStoppableAnimation;
 import game.collision.Collidable;
+import game.levels.LevelInformation;
 import game.listeners.BallRemover;
 import game.listeners.BlockRemover;
 import game.listeners.HitListener;
 import game.listeners.ScoreTrackingListener;
 import game.screens.CountdownAnimation;
 import game.screens.PauseScreen;
-import geometry.Point;
 import geometry.Velocity;
 import utillity.Counter;
 
@@ -35,22 +34,34 @@ public class GameLevel implements Animation {
   private Paddle currentPaddle;
   private Counter remainingBlocks;
   private Counter remainingBalls;
-  private Counter scoreCounter;
+  private LevelInformation currentLevelInfo;
   private LivesIndicator lives;
+  private Counter scoreCounter;
+
+  private Sprite levelNameLabel;
+  private Sprite scoreLabel;
   private KeyboardSensor keyboard;
   private boolean running;
   private AnimationRunner runner;
-  private GUI gui;
 
   /**
-   * Defualt Constructor.
+   * Default Constructor.
    *
-   * @param width  Width of the board.
-   * @param height Height of the board.
+   * @param currentLevelInfo Level to be run.
+   * @param keyboardSensor   Keyboard Sensor to be used.
+   * @param animationRunner  animation runner to be used.
+   * @param scoreCounter     scoreCounter to be used.
+   * @param lives            the Lives counter to be used.
    */
-  public GameLevel(double width, double height) {
-    this.width = width;
-    this.height = height;
+  public GameLevel(LevelInformation currentLevelInfo, KeyboardSensor keyboardSensor, AnimationRunner animationRunner,
+      Counter scoreCounter, LivesIndicator lives) {
+    this.width = 800;
+    this.height = 600;
+    this.currentLevelInfo = currentLevelInfo;
+    this.keyboard = keyboardSensor;
+    this.runner = animationRunner;
+    this.scoreCounter = scoreCounter;
+    this.lives = lives;
   }
 
   /**
@@ -95,7 +106,7 @@ public class GameLevel implements Animation {
    * @param color the color for the borders.
    */
   private void generateBorders(Color color) {
-    Block top = new Block(0, 0, width, padding, color);
+    Block top = new Block(0, 0, width, padding * 2, color);
     top.addToGame(this);
     Block left = new Block(0, 0, padding, height, color);
     left.addToGame(this);
@@ -109,33 +120,19 @@ public class GameLevel implements Animation {
   /**
    * Generates a block pattern for the specified level.
    *
-   * @param blockWidth  Width of each block in the pattern.
-   * @param blockHeight Height of each block in the pattern.
+   * @param blocks array of blocks to load.
    */
-  private void generatePattern(double blockWidth, int blockHeight) {
-    Random rand = new Random();
+  private void loadBlocks(List<Block> blocks) {
     remainingBlocks = new Counter();
     ArrayList<HitListener> listeners = new ArrayList<HitListener>();
     listeners.add(new BlockRemover(this, remainingBlocks));
     listeners.add(new ScoreTrackingListener(scoreCounter));
-    int rows = 4;
-    int count = 3;
-    for (int row = 0; row < rows; row++) {
-      float[] hsbVals = Color.RGBtoHSB(rand.nextInt(255), rand.nextInt(255), rand.nextInt(255), null); // Generates a
-      Color color = Color.getHSBColor(hsbVals[0], hsbVals[1], hsbVals[2]); // random Color.
-      double y = padding + 0.24 * (height - 2 * padding) + row * blockHeight;
-      for (int col = 1; col <= 2 * rows - row; col++) {
-        double x = width - padding - col * blockWidth;
-        CountingBlock cb = new CountingBlock(x, y, blockWidth, blockHeight, color, count);
-        for (HitListener listener : listeners) {
-          cb.addHitListener(listener);
-        }
-        cb.addToGame(this);
-        remainingBlocks.increase(1);
+    for (Block cb : blocks) {
+      for (HitListener listener : listeners) {
+        cb.addHitListener(listener);
       }
-      if (row == 0) {
-        count--;
-      }
+      cb.addToGame(this);
+      remainingBlocks.increase(1);
     }
   }
 
@@ -144,11 +141,13 @@ public class GameLevel implements Animation {
    * direction.
    *
    * @param radius the radius for the ball.
+   * @param v      the velocity for the ball.
    */
-  private void addBall(Ball b) {
+  private void addBall(int radius, Velocity v) {
+    Ball b = new Ball(width / 2, height - paddleHeight - radius - padding, radius, Color.WHITE, environment);
+    b.setVelocity(v);
     b.addToGame(this);
     remainingBalls.increase(1);
-    ball.addToGame(this);
   }
 
   /**
@@ -156,12 +155,13 @@ public class GameLevel implements Animation {
    *
    * @param pWidth  width of the paddle.
    * @param pHeight height of the paddle.
+   * @param speed   the speed of the paddle.
    */
-  private void addPaddle(double pWidth, double pHeight) {
+  private void addPaddle(double pWidth, double pHeight, double speed) {
     if (currentPaddle != null) {
       currentPaddle.removeFromGame(this);
     }
-    currentPaddle = new Paddle(width, height, pWidth, pHeight, padding, Color.ORANGE, keyboard);
+    currentPaddle = new Paddle(width, height, pWidth, pHeight, padding, keyboard, speed);
     currentPaddle.addToGame(this);
   }
 
@@ -170,51 +170,78 @@ public class GameLevel implements Animation {
    * to the game.
    */
   public void initGame() {
-    gui = new GUI("myGame", (int) width, (int) height);
+    remainingBalls = new Counter();
+    levelNameLabel = new Sprite() {
+      private String name = "";
+
+      @Override
+      public void timePassed() {
+        try {
+          name = currentLevelInfo.levelName();
+        } catch (Exception exception) {
+          name = "";
+        }
+      }
+
+      @Override
+      public void drawOn(DrawSurface d) {
+        d.setColor(Color.WHITE);
+        d.drawText(390, 20, "Current Level: " + name, 18);
+      }
+    };
+    scoreLabel = new Sprite() {
+      @Override
+      public void timePassed() {
+        // Nothing.
+      }
+
+      @Override
+      public void drawOn(DrawSurface d) {
+        d.setColor(Color.WHITE);
+        d.drawText(240, 20, "Score: " + scoreCounter.getValue(), 18);
+
+      }
+    };
+  }
+
+  /**
+   * Initializes the turn according to the level specifications.
+   *
+   */
+  public void initialize() {
+    initGame();
     environment = new GameEnvironment();
     sprites = new SpriteCollection();
-    sprites.addSprite(new Block(0, 0, this.width, this.height, Color.GRAY));
-    scoreCounter = new Counter();
-    remainingBalls = new Counter();
-    lives = new LivesIndicator(new Point(0, 10), 4);
-    keyboard = gui.getKeyboardSensor();
-    this.runner = new AnimationRunner(gui);
-    padding = 10;
+    addSprite(currentLevelInfo.getBackground());
+    padding = 15;
     generateBorders(Color.BLACK);
-    sprites.addSprite(lives);
+    addSprite(lives);
+    levelNameLabel.timePassed();
+    addSprite(levelNameLabel);
+    addSprite(scoreLabel);
     paddleHeight = 15;
-    generatePattern(width / 13, 20);
+    loadBlocks(currentLevelInfo.blocks());
+    this.running = true;
   }
 
   /**
    * Initialize a new turn: create the Blocks and Balls (and Paddle) and add them
    * to the game.
    *
-   * @param balls the amount of balls to generate.
    */
-  public void initTurn(int balls) {
-    for (int i = 0; i < balls; i++) {
-      addBall(5);
+  public void initTurn() {
+    for (int i = 0; i < currentLevelInfo.numberOfBalls(); i++) {
+      Velocity v = currentLevelInfo.initialBallVelocities().get(i);
+      addBall(5, v);
     }
-    addPaddle(width / 7, paddleHeight);
-  }
-
-  /**
-   * Run the game -- start the animation loop.
-   */
-  public void run() {
-    initGame();
-    while (lives.getLives() > 0) {
-      initTurn(2);
-      playOneTurn();
-    }
-    gui.close();
+    addPaddle(currentLevelInfo.paddleWidth(), paddleHeight, currentLevelInfo.paddleSpeed());
   }
 
   /**
    * Run a single turn.
    */
   public void playOneTurn() {
+    initTurn();
     this.runner.run(new CountdownAnimation(2, 3, sprites));
     this.running = true;
     this.runner.run(this);
@@ -239,7 +266,16 @@ public class GameLevel implements Animation {
       this.running = false;
     }
     if (this.keyboard.isPressed("p")) {
-      this.runner.run(new PauseScreen(this.keyboard));
+      PauseScreen p = new PauseScreen();
+      this.runner.run(new KeyPressStoppableAnimation(this.keyboard, "space", p));
     }
+  }
+
+  /**
+   *
+   * @return Wether or not the player has any remaining blocks to break.
+   */
+  public boolean hasBlocks() {
+    return remainingBlocks.getValue() != 0;
   }
 }

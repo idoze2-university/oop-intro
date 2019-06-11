@@ -55,13 +55,6 @@ public class CountingBlock extends Block {
     int width = (int) collisionRectangle.getWidth();
     int height = (int) collisionRectangle.getHeight();
     d.drawRectangle(x, y, width, height);
-
-    // Print the count literal value in the middle.
-    int textSize = 13;
-    Point pt = collisionRectangle.getUpperLeft().add((collisionRectangle.getWidth() - textSize) / 2.0,
-        (collisionRectangle.getHeight() + textSize) / 2.0);
-
-    d.drawText((int) pt.getX(), (int) pt.getY(), String.valueOf(getHitPoints()), textSize);
   }
 
   @Override

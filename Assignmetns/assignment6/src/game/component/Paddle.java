@@ -13,6 +13,7 @@ import geometry.Velocity;
  */
 public class Paddle extends Block {
   private KeyboardSensor keyboard;
+  private double speed;
   private double xLBound;
   private double xRBound;
 
@@ -24,16 +25,17 @@ public class Paddle extends Block {
    * @param width         width of the paddle.
    * @param height        height of the paddle.
    * @param screenPadding spacing to keep with the screen bounds.
-   * @param color         color of the paddle.
    * @param keyboard      KeyboardSensor object which contains the information
    *                      about which keys are pressed.
+   * @param speed         the speed in which the paddle should move.
    */
-  public Paddle(double screenWidth, double screenHeight, double width, double height, double screenPadding, Color color,
-      KeyboardSensor keyboard) {
-    super((screenWidth - width) / 2.0, screenHeight - screenPadding - height, width, height, color);
+  public Paddle(double screenWidth, double screenHeight, double width, double height, double screenPadding,
+      KeyboardSensor keyboard, double speed) {
+    super((screenWidth - width) / 2.0, screenHeight - screenPadding - height, width, height, Color.ORANGE);
     xLBound = screenPadding;
     xRBound = screenWidth - screenPadding;
     this.keyboard = keyboard;
+    this.speed = speed;
   }
 
   @Override
@@ -53,15 +55,15 @@ public class Paddle extends Block {
    * Invokes a tick event, moves according to keypresses.
    */
   public void timePassed() {
-    double speed = 7.0;
+    double fixedspeed = 0;
     if (keyboard.isPressed(KeyboardSensor.LEFT_KEY)) {
-      speed = Math.min(speed, Math.abs(getCollisionRectangle().getUpperLeft().getX() - xLBound));
-      moveLeft(speed);
+      fixedspeed = Math.min(speed, Math.abs(getCollisionRectangle().getUpperLeft().getX() - xLBound));
+      moveLeft(fixedspeed);
     }
     if (keyboard.isPressed(KeyboardSensor.RIGHT_KEY)) {
-      speed = Math.min(speed,
+      fixedspeed = Math.min(speed,
           Math.abs(getCollisionRectangle().getUpperLeft().getX() + getCollisionRectangle().getWidth() - xRBound));
-      moveRight(speed);
+      moveRight(fixedspeed);
     }
   }
 }

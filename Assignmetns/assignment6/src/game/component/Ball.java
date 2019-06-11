@@ -77,8 +77,9 @@ public class Ball implements Sprite {
 
   @Override
   public void drawOn(DrawSurface surface) {
-    surface.setColor(color);
+    surface.setColor(Color.black);
     surface.drawCircle((int) getX(), (int) getY(), radius);
+    surface.setColor(color);
     surface.fillCircle((int) getX(), (int) getY(), radius);
   }
 
@@ -112,7 +113,9 @@ public class Ball implements Sprite {
    */
   private Line[] getTrajectoryComponents() {
     Line trajectory = new Line(center, velocity.applyToPoint(center));
-    Line[] trajs = {trajectory.extend(radius), trajectory.getHorizonalComponent().extend(radius),
+    Line[] trajs = {
+        // trajectories to be tested.
+        trajectory.extend(radius), trajectory.getHorizonalComponent().extend(radius),
         trajectory.getVerticalComponent().extend(radius) };
     return trajs;
   }

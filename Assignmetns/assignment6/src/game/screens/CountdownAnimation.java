@@ -37,7 +37,7 @@ public class CountdownAnimation implements Animation {
   public void doOneFrame(DrawSurface d) {
     gameScreen.drawAllOn(d);
     if (curr != 0) {
-      d.drawText(400, 300, String.valueOf(curr), 10);
+      d.drawText(400 - 25, 300 - 25, String.valueOf(curr), 50);
     }
     Sleeper s = new Sleeper();
     if (curr != countFrom) {

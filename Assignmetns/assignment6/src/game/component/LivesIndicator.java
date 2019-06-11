@@ -48,12 +48,12 @@ class LivesIndicator implements Sprite {
 
   @Override
   public void drawOn(DrawSurface d) {
-    int size = 10;
-    d.setColor(Color.RED);
-    d.drawText((int) location.getX(), (int) location.getY() + (size * 2) / 3, "HP:", size * 2);
+    int size = 9;
+    d.setColor(Color.WHITE);
+    d.drawText((int) location.getX(), (int) location.getY() + (size * 2) / 3, "Lives:", size * 2);
     for (int i = 0; i < counter.getValue(); i++) {
       d.setColor(Color.WHITE);
-      d.fillCircle((int) location.getX() + 5 * size + (2 * size) * i, (int) location.getY(), size);
+      d.fillCircle((int) location.getX() + 7 * size + (2 * size) * i, (int) location.getY(), size);
     }
   }
 
