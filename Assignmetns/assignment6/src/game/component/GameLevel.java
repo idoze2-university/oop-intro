@@ -145,11 +145,8 @@ public class GameLevel implements Animation {
    *
    * @param radius the radius for the ball.
    */
-  private void addBall(int radius) {
-    Ball ball = new Ball((width - radius) / 2.0, height - padding - radius - paddleHeight * 2, radius, Color.white,
-        environment);
-    Random r = new Random();
-    ball.setVelocity(Velocity.fromAngleAndSpeed(r.nextInt(90) + 45, 7));
+  private void addBall(Ball b) {
+    b.addToGame(this);
     remainingBalls.increase(1);
     ball.addToGame(this);
   }
