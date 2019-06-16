@@ -1,0 +1,6 @@
+idoFirst:98
+idoSecond:98
+idoThird:98
+idoBest:100
+ido:90
+idoLoser:0

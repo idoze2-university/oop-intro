@@ -6,6 +6,14 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Program",
+            "request": "launch",
+            "mainClass": "Program",
+            //"args": ["-cp bin:resources"],
+            "projectName": "tableTest"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Ass6Game",
             "request": "launch",
             "mainClass": "src.Ass6Game",
@@ -42,12 +50,6 @@
             "type": "java",
             "name": "Debug (Launch) - Current File",
             "args": [
-                24,
-                4,
-                6,
-                8,
-                4,
-                18
             ],
             "request": "launch",
             "mainClass": "${file}"
