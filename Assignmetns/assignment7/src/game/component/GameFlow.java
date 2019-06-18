@@ -8,7 +8,6 @@ import game.animation.KeyPressStoppableAnimation;
 import game.levels.LevelInformation;
 import game.screens.EndScreen;
 import geometry.Point;
-import io.score.HighScoresTable;
 import utillity.Counter;
 
 /**

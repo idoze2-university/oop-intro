@@ -4,7 +4,7 @@ package io.score;
  * The ScoreInfo class represents a single ScoreToName entry in the
  * HighScoresTable.
  */
-public class ScoreInfo implements java.io.Serializable{
+public class ScoreInfo implements java.io.Serializable {
   private String name;
   private int score;
 

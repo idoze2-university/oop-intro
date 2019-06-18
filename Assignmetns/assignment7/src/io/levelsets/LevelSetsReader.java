@@ -1,15 +1,9 @@
 package io.levelsets;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import game.component.Block;
-import game.component.Sprite;
-import game.levels.LevelInformation;
-import geometry.Velocity;
 
 /**
  * The LeveelSpecificationReader reads LevelInfo from formatted file.

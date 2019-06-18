@@ -2,9 +2,7 @@ package io.levelfactory;
 
 import java.awt.Color;
 import java.awt.Image;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -39,10 +37,10 @@ public class SpecificationParser {
     for (String entry : entries) {
       String[] velocityData = entry.split(",");
       int speed = Integer.parseInt(velocityData[1]);
-      while(speed>100){
-        speed/=10;
+      while (speed > 100) {
+        speed /= 10;
       }
-      Velocity v = Velocity.fromAngleAndSpeed(Integer.parseInt(velocityData[0]) + 90,speed );
+      Velocity v = Velocity.fromAngleAndSpeed(Integer.parseInt(velocityData[0]) + 90, speed);
       ret.add(v);
     }
     return ret;

@@ -23,15 +23,16 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
   private ArrayList<String> keys;
   private ArrayList<String> messages;
   private ArrayList<T> statusList;
-  private HashMap<String,Menu<T>> keyToSubMenu;
+  private HashMap<String, Menu<T>> keyToSubMenu;
   private AnimationRunner runner;
 
   /**
    * default constructor.
    *
    * @param sensor the keyboard sensor to read the keys.
+   * @param runner the runner to be used for the menu.
    */
-  public MenuAnimation(AnimationRunner runner,KeyboardSensor sensor) {
+  public MenuAnimation(AnimationRunner runner, KeyboardSensor sensor) {
     this.runner = runner;
     this.sensor = sensor;
     status = null;
@@ -39,7 +40,7 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
     keys = new ArrayList<String>();
     messages = new ArrayList<String>();
     statusList = new ArrayList<T>();
-    keyToSubMenu = new HashMap<String,Menu<T>>();
+    keyToSubMenu = new HashMap<String, Menu<T>>();
 
   }
 
@@ -62,13 +63,11 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
     int i = 0;
     for (String key : keys) {
       if (sensor.isPressed(key)) {
-        if(keyToSubMenu.containsKey(key)){
+        if (keyToSubMenu.containsKey(key)) {
           runner.run(keyToSubMenu.get(key));
           status = keyToSubMenu.get(key).getStatus();
           break;
-        }
-        else
-        {
+        } else {
           status = statusList.get(i);
         }
       }

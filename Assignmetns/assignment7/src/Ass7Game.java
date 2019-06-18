@@ -1,9 +1,6 @@
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import biuoop.DialogManager;
@@ -14,7 +11,6 @@ import game.component.GameFlow;
 import game.levels.LevelInformation;
 import game.screens.HighScoresAnimation;
 import game.screens.MenuAnimation;
-import io.levelfactory.LevelSpecificationReader;
 import io.levelsets.LevelSet;
 import io.levelsets.LevelSetsReader;
 import io.score.HighScoresTable;
@@ -32,9 +28,8 @@ public class Ass7Game {
    * Start a game instance.
    *
    * @param args command line arguments.
+   * @throws IOException if file is not found.
    */
-  public static LevelSet levelSet;
-
   public static void main(String[] args) throws IOException {
     GUI gui = new GUI("myGame", 800, 600);
     AnimationRunner animationRunner = new AnimationRunner(120, gui);
@@ -53,35 +48,28 @@ public class Ass7Game {
 
     InputStream setsFile = ClassLoader.getSystemClassLoader().getResourceAsStream(args[0]);
     List<LevelSet> levelSets = LevelSetsReader.fromReader(new InputStreamReader(setsFile));
-    Task<Void> runGame = new Task<Void>() {
-      @Override
-      public Void run() {
-        GameFlow game = new GameFlow(animationRunner, gui.getKeyboardSensor());
-        List<LevelInformation> levels = levelSet.getLevels();
-        game.runLevels(levels);
-        int score = game.getScore();
-        if (scores.getRank(score) <= scores.size()) {
-          DialogManager dialog = gui.getDialogManager();
-          String name = dialog.showQuestionDialog("Name", "What is your name?", "");
-          ScoreInfo data = new ScoreInfo(name, score);
-          scores.add(data);
-        }
-        try {
-          scores.save("db");
-        } catch (Exception e) {
-          System.out.println("Can't save.... for some reason. " + e.toString());
-        }
-        showHiScores.run();
-        return null;
-      }
-    };
     Menu<Task<Void>> subMenu = new MenuAnimation<Task<Void>>(animationRunner, gui.getKeyboardSensor());
     for (LevelSet l : levelSets) {
       subMenu.addSelection(l.getName(), l.getDesc(), new Task<Void>() {
         @Override
         public Void run() {
-          levelSet = l;
-          return runGame.run();
+          GameFlow game = new GameFlow(animationRunner, gui.getKeyboardSensor());
+          List<LevelInformation> levels = l.getLevels();
+          game.runLevels(levels);
+          int score = game.getScore();
+          if (scores.getRank(score) <= scores.size()) {
+            DialogManager dialog = gui.getDialogManager();
+            String name = dialog.showQuestionDialog("Name", "What is your name?", "");
+            ScoreInfo data = new ScoreInfo(name, score);
+            scores.add(data);
+          }
+          try {
+            scores.save("db");
+          } catch (Exception e) {
+            System.out.println("Can't save.... for some reason. " + e.toString());
+          }
+          showHiScores.run();
+          return null;
         }
       });
     }

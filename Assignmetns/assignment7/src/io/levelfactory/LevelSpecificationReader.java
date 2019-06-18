@@ -1,7 +1,6 @@
 package io.levelfactory;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -38,8 +37,8 @@ public class LevelSpecificationReader {
          List<Velocity> initialBallVelocities = SpecificationParser.parseVelocities(br.readLine());
          Sprite background = SpecificationParser.parseBackGround(br.readLine());
          int paddleSpeedRaw = Integer.parseInt(SpecificationParser.getDataValue(br.readLine()));
-         while(paddleSpeedRaw>100){
-            paddleSpeedRaw/=2;
+         while (paddleSpeedRaw > 100) {
+            paddleSpeedRaw /= 2;
          }
          int paddleSpeed = paddleSpeedRaw;
          int paddleWidth = Integer.parseInt(SpecificationParser.getDataValue(br.readLine()));
@@ -53,7 +52,7 @@ public class LevelSpecificationReader {
          br.readLine();
          List<Block> blocks = new ArrayList<Block>();
          String line = br.readLine();
-         while (!(line).equals("END_BLOCKS")){
+         while (!(line).equals("END_BLOCKS")) {
             if (line.trim().equals("")) {
                line = br.readLine();
                continue;
@@ -64,7 +63,7 @@ public class LevelSpecificationReader {
                   x += factory.getSpaceWidth(s);
                } else {
                   blocks.add(factory.getBlock(s, x, y));
-                  x+=factory.getBlockWidth(s);
+                  x += factory.getBlockWidth(s);
                }
             }
             y += rowHeight;

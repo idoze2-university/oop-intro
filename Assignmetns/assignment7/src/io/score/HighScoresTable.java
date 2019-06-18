@@ -1,11 +1,7 @@
 package io.score;
 
-import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -15,7 +11,7 @@ import java.util.List;
 /**
  * The HighScoresTable class implements a collection of ScoreInfo entries.
  */
-public class HighScoresTable implements java.io.Serializable{
+public class HighScoresTable implements java.io.Serializable {
 
   private int size;
   private List<ScoreInfo> scores;
@@ -93,12 +89,10 @@ public class HighScoresTable implements java.io.Serializable{
    */
   public static HighScoresTable load(String filename) throws IOException {
     ObjectInputStream is = null;
-    try
-    {
+    try {
       is = new ObjectInputStream(new FileInputStream(filename));
-      return (HighScoresTable)is.readObject();
-    }
-    catch (Exception e) {
+      return (HighScoresTable) is.readObject();
+    } catch (Exception e) {
       return new HighScoresTable(5);
     } finally {
       if (is != null) {
@@ -115,8 +109,7 @@ public class HighScoresTable implements java.io.Serializable{
    */
   public void save(String filename) throws IOException {
     ObjectOutputStream os = null;
-    try
-    {
+    try {
       os = new ObjectOutputStream(new FileOutputStream(filename));
       os.writeObject(this);
     } finally {
@@ -124,21 +117,5 @@ public class HighScoresTable implements java.io.Serializable{
         os.close();
       }
     }
-  }
-
-
-  public String print() {
-    String out = "";
-    for (int i = 0; i < size(); i++) {
-      try {
-        ScoreInfo entry = scores.get(i);
-        out += entry;
-
-      } catch (Exception e) {
-        out += "-";
-      }
-      out += "\n\n";
-    }
-    return out;
   }
 }
