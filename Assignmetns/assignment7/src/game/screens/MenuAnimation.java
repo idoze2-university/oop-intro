@@ -1,10 +1,12 @@
 package game.screens;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import biuoop.DrawSurface;
 import biuoop.KeyboardSensor;
 import game.animation.Animation;
+import game.animation.AnimationRunner;
 import ui.Menu;
 
 /**
@@ -21,23 +23,31 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
   private ArrayList<String> keys;
   private ArrayList<String> messages;
   private ArrayList<T> statusList;
+  private HashMap<String,Menu<T>> keyToSubMenu;
+  private AnimationRunner runner;
 
   /**
    * default constructor.
+   *
+   * @param sensor the keyboard sensor to read the keys.
    */
-  public MenuAnimation(KeyboardSensor sensor) {
+  public MenuAnimation(AnimationRunner runner,KeyboardSensor sensor) {
+    this.runner = runner;
     this.sensor = sensor;
     status = null;
     count = 0;
     keys = new ArrayList<String>();
     messages = new ArrayList<String>();
     statusList = new ArrayList<T>();
+    keyToSubMenu = new HashMap<String,Menu<T>>();
 
   }
 
   @Override
   public T getStatus() {
-    return status;
+    T temp = status;
+    status = null;
+    return temp;
   }
 
   @Override
@@ -52,7 +62,15 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
     int i = 0;
     for (String key : keys) {
       if (sensor.isPressed(key)) {
-        status = statusList.get(i);
+        if(keyToSubMenu.containsKey(key)){
+          runner.run(keyToSubMenu.get(key));
+          status = keyToSubMenu.get(key).getStatus();
+          break;
+        }
+        else
+        {
+          status = statusList.get(i);
+        }
       }
       i++;
     }
@@ -71,6 +89,12 @@ public class MenuAnimation<T> implements Menu<T>, Animation {
     statusList.add(count, returnVal);
     count++;
 
+  }
+
+  @Override
+  public void addSubMenu(String key, String message, Menu<T> subMenu) {
+    addSelection(key, message, null);
+    keyToSubMenu.put(key, subMenu);
   }
 
 }

@@ -1,0 +1,39 @@
+
+# Level 1
+# Apple Tech
+
+START_LEVEL
+level_name:Corporation Corruption
+ball_velocities:-60,7 -40,7 -20,7 0,7 60,7 40,7 20,7
+background:image(background_images/jobs.jpg)
+paddle_speed:650
+paddle_width:170
+block_definitions:definitions/apple_block_definitions.txt
+blocks_start_x:120
+blocks_start_y:40
+row_height:15
+num_blocks:217
+START_BLOCKS
+-----------------bb----
+----------------bbb----
+---------------bbbb----
+---------------bbb-----
+---------------bb------
+-----------------------
+---------bbbbb--bbbbb--
+--------bbbbbbbbbbbbbb-
+-------bbbbbbbbbbbbbbb-
+-------bbbbbbbbbbbbbb--
+------bbbbbbbbbbbbbb---
+------bbbbbbbbbbbbbb---
+------bbbbbbbbbbbbbb---
+------bbbbbbbbbbbbbb---
+-------bbbbbbbbbbbbbb--
+-------bbbbbbbbbbbbbbbb
+-------bbbbbbbbbbbbbbbb
+--------bbbbbbbbbbbbbb-
+--------bbbbbbbbbbbbbb-
+---------bbbbbbbbbbbb--
+----------bbbb--bbbb---
+END_BLOCKS
+END_LEVEL

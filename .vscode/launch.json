@@ -6,10 +6,16 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - Ass7Game",
+            "request": "launch",
+            "mainClass": "Ass7Game",
+            "projectName": "assignment7"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - Program",
             "request": "launch",
             "mainClass": "Program",
-            //"args": ["-cp bin:resources"],
             "projectName": "tableTest"
         },
         {
@@ -49,8 +55,7 @@
         {
             "type": "java",
             "name": "Debug (Launch) - Current File",
-            "args": [
-            ],
+            "args": ["level_sets.txt"],
             "request": "launch",
             "mainClass": "${file}"
         }

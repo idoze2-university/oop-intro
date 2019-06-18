@@ -3,5 +3,6 @@
     "checkstyle.configurationFile": "/home/uni/Desktop/University/OOP1/lib/biuoop.xml",
     "checkstyle.version": "/home/uni/Desktop/University/OOP1/lib/checkstyle-5.7-all.jar",
     "java.dependency.syncWithFolderExplorer": true,
-    "java.dependency.packagePresentation": "hierarchical"
+    "java.dependency.packagePresentation": "hierarchical",
+    "java.checkstyle.configuration": "/home/uni/Desktop/University/OOP1/lib/biuoop.xml"
 }

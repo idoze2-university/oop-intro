@@ -4,8 +4,8 @@ import java.util.List;
 
 import biuoop.DrawSurface;
 import game.animation.Animation;
-import io.HighScoresTable;
-import io.ScoreInfo;
+import io.score.HighScoresTable;
+import io.score.ScoreInfo;
 
 public class HighScoresAnimation implements Animation {
 
@@ -23,7 +23,7 @@ public class HighScoresAnimation implements Animation {
   @Override
   public void doOneFrame(DrawSurface d) {
     List<ScoreInfo> scoreinfos = scores.getHighScores();
-    for (int i = 0; i < scores.size(); i++) {
+    for (int i = 0; i < scoreinfos.size(); i++) {
       d.drawText(30,40*(i + 3),scoreinfos.get(i).toString(),20);
     }
   }

@@ -22,4 +22,14 @@ public interface Menu<T> extends Animation {
    * @return the selected entry.
    */
   T getStatus();
+
+  /**
+   * Adds a sub menu to the menu.
+   *
+   * @param key     key that selects the submenu.
+   * @param message label for the submenu.
+   * @param subMenu Menu to be returned when submenu is selected.
+   */
+  void addSubMenu(String key, String message, Menu<T> subMenu);
+
 }

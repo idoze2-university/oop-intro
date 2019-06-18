@@ -1,25 +1,29 @@
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
 import biuoop.DialogManager;
 import biuoop.GUI;
-import biuoop.KeyboardSensor;
-import game.animation.Animation;
 import game.animation.AnimationRunner;
 import game.animation.KeyPressStoppableAnimation;
 import game.component.GameFlow;
 import game.levels.LevelInformation;
-import game.levels.Levels;
 import game.screens.HighScoresAnimation;
 import game.screens.MenuAnimation;
-import io.HighScoresTable;
-import io.ScoreInfo;
+import io.levelfactory.LevelSpecificationReader;
+import io.levelsets.LevelSet;
+import io.levelsets.LevelSetsReader;
+import io.score.HighScoresTable;
+import io.score.ScoreInfo;
 import ui.Menu;
 import ui.Task;
 
 /**
- * The Ass6 implements an Arkanoid game using the Game class.
+ * The Ass7 implements an Arkanoid game using the Game class.
  *
  * @author zeiraid 322607177
  */
@@ -29,48 +33,13 @@ public class Ass7Game {
    *
    * @param args command line arguments.
    */
-  public static void main(String[] args) {
+  public static LevelSet levelSet;
+
+  public static void main(String[] args) throws IOException {
     GUI gui = new GUI("myGame", 800, 600);
-    AnimationRunner animationRunner = new AnimationRunner(gui);
-    HighScoresTable scores = new HighScoresTable(5);
-    File table = new File(ClassLoader.getSystemClassLoader().getResource("test.txt").getFile());
-    try {
-      scores.load(table);
-    } catch (Exception e) {
-      System.out.println(String.format("Couldn't load Hs table from '%s'\nBecause: '%s'", table, e));
-    }
-
-    Menu<Task<Void>> menu = new MenuAnimation<Task<Void>>(gui.getKeyboardSensor());
-
-    Task<Void> runGame = new Task<Void>() {
-
-      @Override
-      public Void run() {
-        GameFlow game = new GameFlow(animationRunner, gui.getKeyboardSensor());
-        List<LevelInformation> levels = new ArrayList<LevelInformation>();
-        for (String arg : args) {
-          LevelInformation info = Levels.getLevel(Integer.parseInt(arg));
-          if (info != null) {
-            levels.add(info);
-          }
-        }
-        game.runLevels(levels);
-        int score = game.getScore();
-        if (scores.getRank(score) <= scores.size()) {
-          DialogManager dialog = gui.getDialogManager();
-          String name = dialog.showQuestionDialog("Name", "What is your name?", "");
-          ScoreInfo data = new ScoreInfo(name, score);
-          scores.add(data);
-        }
-        try {
-          scores.save(table);
-        } catch (Exception e) {
-          System.out.println(String.format("Couldn't save Hs table from '%s'\nBecause: '%s'", table, e));
-        }
-        return null;
-      }
-    };
-    menu.addSelection("s", "Play", runGame);
+    AnimationRunner animationRunner = new AnimationRunner(120, gui);
+    HighScoresTable scores = HighScoresTable.load("db");
+    Menu<Task<Void>> menu = new MenuAnimation<Task<Void>>(animationRunner, gui.getKeyboardSensor());
 
     Task<Void> showHiScores = new Task<Void>() {
       @Override
@@ -81,12 +50,48 @@ public class Ass7Game {
         return null;
       }
     };
-    menu.addSelection("h", "Hi scores", showHiScores);
 
-    Task<Void> quit = new Task<Void>(){
+    InputStream setsFile = ClassLoader.getSystemClassLoader().getResourceAsStream(args[0]);
+    List<LevelSet> levelSets = LevelSetsReader.fromReader(new InputStreamReader(setsFile));
+    Task<Void> runGame = new Task<Void>() {
       @Override
       public Void run() {
-        gui.close();
+        GameFlow game = new GameFlow(animationRunner, gui.getKeyboardSensor());
+        List<LevelInformation> levels = levelSet.getLevels();
+        game.runLevels(levels);
+        int score = game.getScore();
+        if (scores.getRank(score) <= scores.size()) {
+          DialogManager dialog = gui.getDialogManager();
+          String name = dialog.showQuestionDialog("Name", "What is your name?", "");
+          ScoreInfo data = new ScoreInfo(name, score);
+          scores.add(data);
+        }
+        try {
+          scores.save("db");
+        } catch (Exception e) {
+          System.out.println("Can't save.... for some reason. " + e.toString());
+        }
+        showHiScores.run();
+        return null;
+      }
+    };
+    Menu<Task<Void>> subMenu = new MenuAnimation<Task<Void>>(animationRunner, gui.getKeyboardSensor());
+    for (LevelSet l : levelSets) {
+      subMenu.addSelection(l.getName(), l.getDesc(), new Task<Void>() {
+        @Override
+        public Void run() {
+          levelSet = l;
+          return runGame.run();
+        }
+      });
+    }
+    menu.addSubMenu("s", "Play Game", subMenu);
+    menu.addSelection("h", "Hi scores", showHiScores);
+
+    Task<Void> quit = new Task<Void>() {
+      @Override
+      public Void run() {
+        System.exit(0);
         return null;
       }
     };
